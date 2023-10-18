@@ -8,7 +8,7 @@ class User(Base):
     """
     User class in DB.
     """
-    __tablename__ = "user"
+    __tablename__ = "site_user"
     id = Column(String, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
@@ -30,7 +30,7 @@ class Valut(Base):
     created = Column(DateTime, nullable=False)
     modified = Column(DateTime, nullable=False)
     open_attempts = Column(Integer, nullable=False)
-    user_id = Column(String, ForeignKey("user.id"))
+    user_id = Column(String, ForeignKey("site_user.id"))
     user = relationship("User", backref="vault")
 
 
