@@ -1,0 +1,17 @@
+# Virtual environments
+venv/
+*.venv
+.venv/
+ENV/
+
+# Python stuff
+__pycache__
+
+# React stuff
+node_modules
+
+# ENV files
+*.env*
+
+# VSC stuff
+.vscode/
