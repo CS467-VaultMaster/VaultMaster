@@ -1,6 +1,7 @@
 from pydantic import BaseModel, validator, EmailStr
 from datetime import datetime
 
+
 class UserCreate(BaseModel):
     username: str
     password1: str
@@ -13,13 +14,13 @@ class UserCreate(BaseModel):
         if not v or not v.strip():
             raise ValueError("This is a required field.")
         return v
-    
+
     @validator("password2")
     def match_passwords(cls, v, values):
         if "password1" in values and v != values["password1"]:
             raise ValueError("Passwords must match.")
         return v
-    
+
 
 class UserUpdate(BaseModel):
     username: str
@@ -33,7 +34,7 @@ class UserUpdate(BaseModel):
         if not v or not v.strip():
             raise ValueError("This is a required field.")
         return v
-    
+
     @validator("password2")
     def match_passwords(cls, v, values):
         if "password1" in values and v != values["password1"]:
@@ -42,6 +43,7 @@ class UserUpdate(BaseModel):
 
 
 class UserResponse(BaseModel):
+    id: str
     username: str
     email: EmailStr
     phone_number: str | None

@@ -4,10 +4,12 @@ from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
+
 class User(Base):
     """
     User class in DB.
     """
+
     __tablename__ = "site_user"
     id = Column(String, primary_key=True)
     username = Column(String, unique=True, nullable=False)
@@ -20,10 +22,11 @@ class User(Base):
     login_attemtps = Column(Integer, nullable=False)
 
 
-class Valut(Base):
+class Vault(Base):
     """
-    Vault class in DB. 
+    Vault class in DB.
     """
+
     __tablename__ = "vault"
     id = Column(String, primary_key=True)
     vault_name = Column(String, nullable=False)
@@ -38,6 +41,7 @@ class Credential(Base):
     """
     Credential class in DB.
     """
+
     __tablename__ = "credential"
     id = Column(String, primary_key=True)
     nickname = Column(String, nullable=True)
