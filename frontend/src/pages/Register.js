@@ -36,7 +36,9 @@ export default function Register() {
         username: username,
         password: password,
         email: email,
-        phone_number: phoneNumber
+        phone_number: phoneNumber,
+        first_name: firstName,
+        last_name: LastName
       });
 
       if (response.data.success){
