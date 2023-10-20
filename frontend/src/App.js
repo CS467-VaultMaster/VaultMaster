@@ -12,7 +12,7 @@ function App() {
   //   useEffect(() => {
   //     console.log("Starting the fetch operation...");
 
-  //     fetch(`${process.env.REACT_APP_FASTAPI_URL}/items/`)
+  //     fetch(`${process.env.REACT_APP_FASTAPI_URL || "http://127.0.0.1:8000"}/items/`)
   //       .then((response) => {
   //         console.log("Received the response:", response);
   //         return response.json();

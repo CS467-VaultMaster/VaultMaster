@@ -19,6 +19,8 @@ services:
       - ./backend:/backend
     env_file:
       - .env.dev
+    environment:
+      - POSTGRES_HOST=database # Ensures Postgres connects properly when running locally or via docker-compose
 
   frontend:
     build:
@@ -28,3 +30,5 @@ services:
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules
+    environment:
+      - REACT_APP_FASTAPI_URL=https://127.0.0.1:8000
