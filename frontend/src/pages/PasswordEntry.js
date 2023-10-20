@@ -1,7 +1,9 @@
 import React from 'react'
 
-export default function PasswordEntry() {
+function PasswordEntry() {
   return (
     <div>PasswordEntry</div>
   )
 }
+
+export default PasswordEntry
