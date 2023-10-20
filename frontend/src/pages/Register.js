@@ -11,7 +11,6 @@ export default function Register() {
     if (pwd.length < 8) {
       return "Password must be at least 8 characters long.";
     }
-
     // Can add other complexity requirements here
     // May want to check against a list of poor passwords as well
     return "";
