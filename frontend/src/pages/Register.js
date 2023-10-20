@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"
+import GeneratePassword from "../components/GeneratePassword";
+import axios from 'axios'
 
 export default function Register() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -8,15 +12,15 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState("");
 
   const checkPasswordComplexity = (pwd) => {
+    // TODO enhance this function with special char requirements, etc.
     if (pwd.length < 8) {
       return "Password must be at least 8 characters long.";
     }
-    // Can add other complexity requirements here
     // May want to check against a list of poor passwords as well
     return "";
   };
 
-  const handleRegistration = (e) => {
+  const handleRegistration = async (e) => {
     e.preventDefault();
 
     const pwdError = checkPasswordComplexity(password);
@@ -27,11 +31,23 @@ export default function Register() {
 
     setPasswordError('')  // Reset password error and proceed with registration
 
-    console.log(`Registering user with:
-      username: ${username},
-      password: ${password},
-      email: ${email},
-      phone: ${phoneNumber}`);
+    try {
+      const response = await axios.post("ENDPOINT",{
+        username: username,
+        password: password,
+        email: email,
+        phone_number: phoneNumber
+      });
+
+      if (response.data.success){
+        console.log(response.data)
+        navigate('/login')
+      }
+
+    } catch (error) {
+      console.error("Error registering user:", error.response)
+      // Also display error message to the user
+    }
   };
 
   return (
@@ -58,6 +74,7 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <GeneratePassword />
           {passwordError && <p className="error">{passwordError}</p>}
         </div>
 
