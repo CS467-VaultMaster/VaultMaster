@@ -21,7 +21,7 @@ from models import User
 router = APIRouter(prefix="/vaultmaster/user")
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 10
-SECRET_KEY =
+SECRET_KEY = "SECRET"
 ALGORITHM = "HS512"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/vaultmaster/user/login")
 
@@ -67,6 +67,17 @@ def register(
             detail="This user already exists.",
         )
     return create_user(db=db, user_create=user_create)
+
+
+@router.get("/account")
+def user_read(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+) -> UserResponse:
+    """
+    Returns the user information.
+    """
+    return get_user_by_id(db=db, id=current_user.id)
 
 
 @router.put("/account")
