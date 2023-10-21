@@ -9,17 +9,21 @@ class User(Base):
     """
     User class in DB.
     """
-
+    # DONE: Add first name and last name.
+    # TODO: Add regex.
     __tablename__ = "site_user"
     id = Column(String, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    phone_number = Column(String, unique=False, nullable=True)
+    # DONE: remove phone_number.
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
     created = Column(DateTime, nullable=False)
     modified = Column(DateTime, nullable=False)
     last_verified = Column(DateTime, nullable=True)
     login_attemtps = Column(Integer, nullable=False)
+    # TODO: Add MFA token.
 
 
 class Vault(Base):

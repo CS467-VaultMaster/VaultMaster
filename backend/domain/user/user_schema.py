@@ -6,8 +6,9 @@ class UserCreate(BaseModel):
     username: str
     password1: str
     password2: str
+    first_name: str
+    last_name: str
     email: EmailStr
-    phone_number: str | None
 
     @validator("username", "password1", "password2", "email")
     def not_empty(cls, v):
@@ -26,8 +27,9 @@ class UserUpdate(BaseModel):
     username: str
     password1: str
     password2: str
+    first_name: str
+    last_name: str
     email: EmailStr
-    phone_number: str | None
 
     @validator("username", "password1", "password2", "email")
     def not_empty(cls, v):
@@ -46,7 +48,8 @@ class UserResponse(BaseModel):
     id: str
     username: str
     email: EmailStr
-    phone_number: str | None
+    first_name: str
+    last_name: str
     created: datetime
     modified: datetime
 

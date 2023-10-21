@@ -17,7 +17,8 @@ def create_user(db: Session, user_create: UserCreate) -> User:
         username=user_create.username,
         password=pwd_context.hash(user_create.password1),
         email=user_create.email,
-        phone_number=user_create.phone_number,
+        first_name=user_create.first_name,
+        last_name=user_create.last_name,
         created=datetime.now(),
         modified=datetime.now(),
         last_verified=datetime.now(),
@@ -39,7 +40,8 @@ def update_user(
     user.username = user_update.username
     user.password = pwd_context.hash(user_update.password1)
     user.email = user_update.email
-    user.phone_number = user_update.phone_number
+    user.first_name = user_update.first_name
+    user.last_name = user_update.last_name
     user.modified = datetime.now()
     db.add(user)
     db.commit()
