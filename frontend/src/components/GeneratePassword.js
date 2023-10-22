@@ -4,7 +4,7 @@ export default function GeneratePassword() {
     const [generatedPassword, setGeneratedPassword] = useState('')
 
     const generatePassword = () => {
-        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(){}[],./;':"
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ "
         let password = ""
         for (let i=0; i < 16; i++){
             password += charset.charAt(Math.floor(Math.random() * charset.length))
