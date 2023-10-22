@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import GeneratePassword from "../components/GeneratePassword";
-import axios from 'axios'
+import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [generalError, setGeneralError] = useState("")
+
+  const isValidEmail = (email) => {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(email);
+  };
 
   const checkPasswordComplexity = (pwd) => {
     // TODO enhance this function with special char requirements, etc.
@@ -23,31 +31,44 @@ export default function Register() {
   const handleRegistration = async (e) => {
     e.preventDefault();
 
-    const pwdError = checkPasswordComplexity(password);
+    if (password1 !== password2) {
+      setPasswordError("Passwords do not match!");
+      setPassword2("")  // Clear password2 field
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setGeneralError("Please enter a valid email address.");
+      return;
+    }
+
+    const pwdError = checkPasswordComplexity(password1);
     if (pwdError) {
       setPasswordError(pwdError);
       return;
     }
 
-    setPasswordError('')  // Reset password error and proceed with registration
+    setPasswordError(""); // Reset password error and proceed with registration
 
     try {
-      const response = await axios.post("ENDPOINT",{
+      const response = await axios.post("ENDPOINT", {
         username: username,
-        password: password,
+        password1: password1,
+        password2: password2,
         email: email,
-        phone_number: phoneNumber,
         first_name: firstName,
-        last_name: LastName
+        last_name: lastName,
       });
 
-      if (response.data.success){
-        console.log(response.data)
-        navigate('/login')
+      if (response.data.success) {
+        console.log(response.data);
+        navigate("/login");
+      } else {
+        setGeneralError(response.data.message || "An error occurred during registration.")
       }
-
     } catch (error) {
-      console.error("Error registering user:", error.response)
+      setGeneralError("Error registering user. Please try again.")
+      console.error("Error registering user:", error.response);
       // Also display error message to the user
     }
   };
@@ -56,6 +77,28 @@ export default function Register() {
     <div className="register page">
       <h2>Register</h2>
       <form onSubmit={handleRegistration}>
+        <div className="input-group">
+          <label htmlFor="firstName">First Name</label> {/* 2. Input for first name */}
+          <input
+            type="text"
+            id="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="lastName">Last Name</label> {/* 2. Input for last name */}
+          <input
+            type="text"
+            id="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </div>
+
         <div className="input-group">
           <label htmlFor="username">Username</label>
           <input
@@ -68,16 +111,27 @@ export default function Register() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password1">Password</label>
           <input
             type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            id="password1"
+            value={password1}
+            onChange={(e) => setPassword1(e.target.value)}
             required
           />
           <GeneratePassword />
           {passwordError && <p className="error">{passwordError}</p>}
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="password2">Confirm Password</label>
+          <input
+            type="password"
+            id="password2"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            required
+          />
         </div>
 
         <div className="input-group">
@@ -87,17 +141,6 @@ export default function Register() {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="phoneNumber">Phone Number</label>
-          <input
-            type="tel"
-            id="phoneNumber"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
         </div>

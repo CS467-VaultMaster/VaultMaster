@@ -15,7 +15,7 @@ export default function Login() {
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div className="input-group">
-          {/* Login with Username and/or Password? */}
+          {/* Login with Username and Password? */}
           <label htmlFor="username">Username or Email</label>
           <input
             type="text"
