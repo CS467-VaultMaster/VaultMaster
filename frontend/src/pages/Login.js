@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(`Logging in with username: ${username} and password: ${password}`);
+    // TODO: Call auth API here and deal with the tokens
+    navigate('/dashboard')
   };
 
   return (
