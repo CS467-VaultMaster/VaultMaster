@@ -7,30 +7,30 @@ import Tools from "./pages/Tools";
 import Register from "./pages/Register";
 
 function PrivateRoute({ children, isAuthenticated }) {
-  // const isAuthenticated = true; // Just for now
-
   const navigate = useNavigate();
-
+  // const isAuthenticated = true; // Just for now
+  
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
     }
   }, [isAuthenticated, navigate]);
-
+  
   return isAuthenticated ? children : null;
 }
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // For now
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // For now
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    navigate("/login")
   };
 
   return (
     <div className="App">
-      {isAuthenticated && <Navigation onLogout={handleLogout} />}
+      {/* {isAuthenticated && <Navigation onLogout={handleLogout} />} */}
       <header>
         <h1>VaultMaster</h1>
       </header>

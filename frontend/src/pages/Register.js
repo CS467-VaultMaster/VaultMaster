@@ -12,7 +12,8 @@ export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [generalError, setGeneralError] = useState("")
+  const [generalError, setGeneralError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const isValidEmail = (email) => {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -33,7 +34,7 @@ export default function Register() {
 
     if (password1 !== password2) {
       setPasswordError("Passwords do not match!");
-      setPassword2("")  // Clear password2 field
+      setPassword2(""); // Clear password2 field
       return;
     }
 
@@ -51,7 +52,7 @@ export default function Register() {
     setPasswordError(""); // Reset password error and proceed with registration
 
     try {
-      const response = await axios.post("ENDPOINT", {
+      const response = await axios.post("http://localhost:3000/", {
         username: username,
         password1: password1,
         password2: password2,
@@ -61,24 +62,34 @@ export default function Register() {
       });
 
       if (response.data.success) {
+        setSuccessMessage("Registration successful! Redirecting to login...");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
         console.log(response.data);
-        navigate("/login");
       } else {
-        setGeneralError(response.data.message || "An error occurred during registration.")
+        setGeneralError(
+          response.data.message || "An error occurred during registration."
+        );
       }
     } catch (error) {
-      setGeneralError("Error registering user. Please try again.")
+      const errorMessage =
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Error registering user. Please try again.";
+      setGeneralError(errorMessage);
       console.error("Error registering user:", error.response);
-      // Also display error message to the user
     }
   };
 
   return (
     <div className="register page">
       <h2>Register</h2>
+      {successMessage && <p className="success">{successMessage}</p>}{" "}
+      {/* Display success message to user */}
       <form onSubmit={handleRegistration}>
         <div className="input-group">
-          <label htmlFor="firstName">First Name</label> {/* 2. Input for first name */}
+          <label htmlFor="firstName">First Name</label>
           <input
             type="text"
             id="firstName"
@@ -89,7 +100,7 @@ export default function Register() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="lastName">Last Name</label> {/* 2. Input for last name */}
+          <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
             id="lastName"

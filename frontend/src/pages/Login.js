@@ -1,21 +1,41 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(`Logging in with username: ${username} and password: ${password}`);
-    // TODO: Call auth API here and deal with the tokens
-    navigate('/dashboard')
+
+    try {
+      const response = await axios.post("ENDPOINT GOES HERE", {
+        username: username,
+        password: password,
+      });
+
+      if (response.data && response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
+        navigate("/dashboard");
+      } else {
+        setLoginError("Authentication failed. Please check your credentials.");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response && error.response.data && error.response.data.detail
+          ? error.response.data.detail
+          : "Error logging in. Please try again.";
+      setLoginError(errorMessage);
+    }
   };
 
   return (
     <div className="login-page">
       <h2>Login</h2>
+      {loginError && <p className="error">{loginError}</p>}
       <form onSubmit={handleLogin}>
         <div className="input-group">
           {/* Login with Username and Password? */}
@@ -46,7 +66,6 @@ export default function Login() {
       <div className="login-links">
         <Link to="/register">Register</Link>
       </div>
-
     </div>
   );
 }
