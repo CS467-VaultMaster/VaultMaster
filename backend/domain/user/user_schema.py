@@ -52,6 +52,8 @@ class UserResponse(BaseModel):
     last_name: str
     created: datetime
     modified: datetime
+    last_login_attempt: datetime
+    login_attempts: int
 
 
 class Token(BaseModel):

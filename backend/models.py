@@ -22,7 +22,8 @@ class User(Base):
     created = Column(DateTime, nullable=False)
     modified = Column(DateTime, nullable=False)
     last_verified = Column(DateTime, nullable=True)
-    login_attemtps = Column(Integer, nullable=False)
+    last_login_attempt = Column(DateTime, nullable=True)
+    login_attempts = Column(Integer, nullable=False)
     # TODO: Add MFA token.
 
 

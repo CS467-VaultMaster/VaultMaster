@@ -19,10 +19,11 @@ def create_user(db: Session, user_create: UserCreate) -> User:
         email=user_create.email,
         first_name=user_create.first_name,
         last_name=user_create.last_name,
-        created=datetime.now(),
-        modified=datetime.now(),
-        last_verified=datetime.now(),
-        login_attemtps=0,
+        created=datetime.utcnow(),
+        modified=datetime.utcnow(),
+        last_verified=datetime.utcnow(),
+        last_login_attempt=datetime.utcnow(),
+        login_attempts=0,
     )
     db.add(db_user)
     db.commit()
@@ -42,10 +43,25 @@ def update_user(
     user.email = user_update.email
     user.first_name = user_update.first_name
     user.last_name = user_update.last_name
-    user.modified = datetime.now()
+    user.modified = datetime.utcnow()
     db.add(user)
     db.commit()
     return get_user_by_username(db, user.username)
+
+
+def update_login_attempts(
+    db: Session,
+    current_user: User,
+    login_attempts: int = 0,
+) -> None:
+    """
+    Update user's login attempts.
+    """
+    user = get_user_by_username(db, current_user.username)
+    user.login_attempts += login_attempts
+    user.last_login_attempt = datetime.utcnow()
+    db.add(user)
+    db.commit()
 
 
 def remove_user(db: Session, current_user: User) -> None:

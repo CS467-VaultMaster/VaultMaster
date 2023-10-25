@@ -12,6 +12,7 @@ from domain.user.user_crud import (
     get_existing_user,
     get_user_by_username,
     get_user_by_id,
+    update_login_attempts,
 )
 from domain.user.user_schema import UserCreate, UserUpdate, UserResponse, Token
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -112,6 +113,11 @@ def login_for_access_token(
     """
     user = get_user_by_username(db, form_data.username)
     if not user or not pwd_context.verify(form_data.password, user.password):
+        if user:
+            # Check how many login attempts the user has made.
+            check_login_attempts(db, user)
+            # Add one to the logint attempts.
+            update_login_attempts(db, user, 1)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password.",
@@ -122,9 +128,30 @@ def login_for_access_token(
         "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     }
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    update_login_attempts(db, user, -(user.login_attempts))
     return {
         "access_token": access_token,
         "token_type": "bearer",
         "username": user.username,
         "user_id": user.id,
     }
+
+
+def check_login_attempts(db: Session, current_user: User):
+    # If the user has more than 3 login attempts.
+    if current_user.login_attempts >= 3:
+        # If 10 minutes have not passed.
+        if datetime.utcnow() < current_user.last_login_attempt:
+            remainder = (current_user.last_login_attempt - datetime.utcnow()).total_seconds()
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Too many failed login attempts. Please try again in {remainder} seconds."
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+        else:
+            # 10 minutes have passed.  Bring the user's login_attempts count down to 0.
+            update_login_attempts(db, current_user, -(current_user.login_attempts))
+    # If the user got to the third unsucessful attempt.
+    if current_user.login_attempts == 2:
+        # Add 10 minutes to last_login_attempt.
+        current_user.last_login_attempt += timedelta(minutes=10)
