@@ -23,5 +23,5 @@ docker compose up -d
 ```
 - Navigate to the following to test out the backend APIs.
 ```sh
-localhost:8080/docs
+localhost:8000/docs
 ```
