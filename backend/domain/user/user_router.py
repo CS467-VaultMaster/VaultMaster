@@ -111,24 +111,29 @@ def login_for_access_token(
     """
     Login endpoint that returns a token.
     """
+    # TODO: Clean up and refactor.
     user = get_user_by_username(db, form_data.username)
     if not user or not pwd_context.verify(form_data.password, user.password):
+        # If user exists but did not enter the correct credential.
         if user:
             # Check how many login attempts the user has made.
             check_login_attempts(db, user)
-            # Add one to the logint attempts.
-            update_login_attempts(db, user, 1)
+            # Add one to the login attempts.
+            update_login_attempts(db, user, 1, user.last_login_attempt)
+
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    # Catch the situation where the user enters in the correct credential while wating.
+    check_login_attempts(db, user)
     data = {
         "sub": user.username,
         "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     }
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
-    update_login_attempts(db, user, -(user.login_attempts))
+    update_login_attempts(db, user, -(user.login_attempts), datetime.utcnow())
     return {
         "access_token": access_token,
         "token_type": "bearer",
@@ -139,14 +144,16 @@ def login_for_access_token(
 
 def check_login_attempts(db: Session, current_user: User):
     # If the user has more than 3 login attempts.
-    if current_user.login_attempts >= 3:
+    if current_user.login_attempts == 3:
         # If 10 minutes have not passed.
         if datetime.utcnow() < current_user.last_login_attempt:
-            remainder = (current_user.last_login_attempt - datetime.utcnow()).total_seconds()
+            remainder = (
+                current_user.last_login_attempt - datetime.utcnow()
+            ).total_seconds()
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Too many failed login attempts. Please try again in {remainder} seconds."
-                headers={"WWW-Authenticate": "Bearer"}
+                detail=f"Too many failed login attempts. Please try again in {remainder} seconds.",
+                headers={"WWW-Authenticate": "Bearer"},
             )
         else:
             # 10 minutes have passed.  Bring the user's login_attempts count down to 0.
@@ -154,4 +161,5 @@ def check_login_attempts(db: Session, current_user: User):
     # If the user got to the third unsucessful attempt.
     if current_user.login_attempts == 2:
         # Add 10 minutes to last_login_attempt.
-        current_user.last_login_attempt += timedelta(minutes=10)
+        new_time = current_user.last_login_attempt + timedelta(minutes=10)
+        update_login_attempts(db, current_user, 0, new_time)

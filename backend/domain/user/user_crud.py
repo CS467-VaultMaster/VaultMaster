@@ -53,13 +53,15 @@ def update_login_attempts(
     db: Session,
     current_user: User,
     login_attempts: int = 0,
+    last_login_attempt: datetime = None,
 ) -> None:
     """
     Update user's login attempts.
     """
     user = get_user_by_username(db, current_user.username)
     user.login_attempts += login_attempts
-    user.last_login_attempt = datetime.utcnow()
+    if last_login_attempt:
+        user.last_login_attempt = last_login_attempt
     db.add(user)
     db.commit()
 
