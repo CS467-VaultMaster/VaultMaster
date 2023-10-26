@@ -5,16 +5,16 @@ import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password1, setPassword1] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("HomerJSimpson");
+  const [password1, setPassword1] = useState("password123");
+  const [password2, setPassword2] = useState("password123");
+  const [email, setEmail] = useState("homer@email.com");
+  const [firstName, setFirstName] = useState("Homer");
+  const [lastName, setLastName] = useState("Simpson");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
+  
   const isValidEmail = (email) => {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return re.test(email);
@@ -52,14 +52,17 @@ export default function Register() {
     setPasswordError(""); // Reset password error and proceed with registration
 
     try {
-      const response = await axios.post("http://localhost:3000/", {
+      alert(process.env.REACT_APP_BASE_URL)
+      console.log(username, password1)
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/vaultmaster/user/register`, {
         username: username,
         password1: password1,
         password2: password2,
-        email: email,
         first_name: firstName,
         last_name: lastName,
+        email: email,
       });
+
 
       if (response.data.success) {
         setSuccessMessage("Registration successful! Redirecting to login...");

@@ -12,10 +12,15 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("ENDPOINT GOES HERE", {
-        username: username,
-        password: password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/vaultmaster/user/login`,
+        {
+          username: username,
+          password: password,
+        }
+      );
+
+      console.log(response.data)
 
       if (response.data && response.data.token) {
         localStorage.setItem("authToken", response.data.token);
@@ -38,8 +43,7 @@ export default function Login() {
       {loginError && <p className="error">{loginError}</p>}
       <form onSubmit={handleLogin}>
         <div className="input-group">
-          {/* Login with Username and Password? */}
-          <label htmlFor="username">Username or Email</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
