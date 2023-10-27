@@ -4,6 +4,8 @@ from models import User
 from passlib.context import CryptContext
 import uuid
 from datetime import datetime
+from domain.vault.vault_crud import create_vault
+from domain.vault.vault_schema import VaultCreate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -27,7 +29,10 @@ def create_user(db: Session, user_create: UserCreate) -> User:
     )
     db.add(db_user)
     db.commit()
-    return get_user_by_username(db, user_create.username)
+    user = get_user_by_username(db, user_create.username)
+    # After creating a user, create a new vault and assign it to the new user.
+    create_vault(db, user, VaultCreate(vault_name=f"{user.username}'s vault."))
+    return get_user_by_username(db, user.username)
 
 
 def update_user(

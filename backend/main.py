@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from domain.user import user_router
+from domain.vault import vault_router
 
 ORIGINS = [
 	"http://localhost:3000",
@@ -18,6 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(user_router.router)
+app.include_router(vault_router.router)
 
 #############################
 # TEST METHODS
