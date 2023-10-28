@@ -27,10 +27,11 @@ app.include_router(vault_router.router)
 #############################
 
 import os, psycopg2
+from db_auth import get_db_auth
 
 # Conceal secrets in .env file
 POSTGRES_USER = os.environ["POSTGRES_USER"]
-POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
+POSTGRES_PASSWORD = get_db_auth()
 # Allows interop between docker-compose and local dev
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
 
