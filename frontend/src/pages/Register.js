@@ -95,7 +95,6 @@ export default function Register() {
       <h2>Register</h2>
       {successMessage && <p className="success">{successMessage}</p>}
       {generalError && <p className="error">{generalError}</p>}
-      {/* Display success message to user */}
       <form onSubmit={handleRegistration}>
         <div className="input-group">
           <label htmlFor="firstName">First Name</label>

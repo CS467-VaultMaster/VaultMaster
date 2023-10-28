@@ -34,17 +34,30 @@ function VaultDashboard() {
   return (
     <div className="vault-dashboard">
       <h2>Dashboard</h2>
-      <ul>
-        {credentials.map((credential) => (
-          <li key={credential.id}>
-            <strong>Nickname:</strong> {credential.nickname}
-            <br />
-            <strong>URL:</strong> {credential.url}
-            <br />
-            <strong>Password:</strong> {credential.password}
-          </li>
-        ))}
-      </ul>
+      {credentials.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Nickname</th>
+              <th>URL</th>
+              <th>Password</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {credentials.map(credential => (
+              <tr key={credential.id}>
+                <td>{credential.nickname}</td>
+                <td>{credential.url}</td>
+                <td>{credential.password}</td>
+                <td>{credential.category}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No credentials found.</p>
+      )}
     </div>
   );
 }
