@@ -33,10 +33,9 @@ export default function Login({ setIsAuthenticated }) {
       }
     } catch (error) {
       console.log(error.response.data.detail);
-      let errorMessage = "Error logging in. Please try again.";
       setPassword("");
       setUsername("");
-      setLoginError(errorMessage);
+      setLoginError(error.response.data.detail);
     }
   };
 
