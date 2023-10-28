@@ -31,11 +31,11 @@ from db_auth import get_db_auth
 
 # Conceal secrets in .env file
 POSTGRES_USER = os.environ["POSTGRES_USER"]
+POSTGRES_DB = os.environ["POSTGRES_DB"]
 POSTGRES_PASSWORD = get_db_auth()
+PG_SSLCERT = os.environ["PG_SSLCERT"]
 # Allows interop between docker-compose and local dev
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
-
-DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_USER}"
 
 @app.get("/")
 def read_root():
@@ -43,7 +43,7 @@ def read_root():
 
 @app.get("/items/")
 def read_items():
-	with psycopg2.connect(DATABASE_URL) as conn:
+	with psycopg2.connect(host=POSTGRES_HOST, port="5432", database=POSTGRES_DB, user=POSTGRES_USER, password=POSTGRES_PASSWORD, sslrootcert=PG_SSLCERT) as conn:
 		with conn.cursor() as curr:
 			curr.execute("SELECT id, name FROM items")
 			items = curr.fetchall()
