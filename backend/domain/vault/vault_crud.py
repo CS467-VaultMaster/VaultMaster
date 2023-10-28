@@ -1,7 +1,10 @@
 from datetime import datetime
 
 from sqlalchemy.orm import Session
-from domain.vault.vault_schema import VaultCreate
+from domain.vault.vault_schema import (
+    VaultCreate,
+    VaultUpdate,
+)
 from models import (
     User,
     Vault,
@@ -37,3 +40,15 @@ def get_vault_by_user_id(db: Session, user_id: str) -> Vault | None:
     Returns a vault that is assigned to the given user.
     """
     return db.query(Vault).filter(Vault.user_id == user_id).first()
+
+
+def update_vault(db: Session, vault_update: VaultUpdate, current_user: User) -> Vault:
+    """
+    Updates user vault.
+    """
+    user_vault = db.query(Vault).filter(Vault.user_id == current_user.id).first()
+    user_vault.vault_name = vault_update.vault_name
+    user_vault.modified = datetime.utcnow()
+    db.add(user_vault)
+    db.commit()
+    return db.query(Vault).filter(Vault.user_id == current_user.id).first()

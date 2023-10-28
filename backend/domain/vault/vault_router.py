@@ -12,6 +12,7 @@ from domain.vault.vault_crud import (
     create_vault,
     get_vaults,
     get_vault_by_user_id,
+    update_vault,
 )
 from domain.user.user_crud import get_user_by_id
 from domain.user.user_router import get_current_user
@@ -41,3 +42,15 @@ def get_user_vault(
     Returns current user's vault.
     """
     return get_vault_by_user_id(db, current_user.id)
+
+
+@router.put("/")
+def vault_update(
+    vault_update: VaultUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> VaultResponse:
+    """
+    Vault update endpoint.
+    """
+    return update_vault(db, vault_update, current_user)
