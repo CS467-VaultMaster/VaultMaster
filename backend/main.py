@@ -18,8 +18,8 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-app.include_router(user_router.router)
-app.include_router(vault_router.router)
+app.include_router(user_router.router, tags=["User"])
+app.include_router(vault_router.router, tags=["Vault"])
 
 #############################
 # TEST METHODS

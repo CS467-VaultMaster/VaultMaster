@@ -7,12 +7,14 @@ from domain.vault.vault_schema import (
     VaultCreate,
     VaultUpdate,
     VaultResponse,
+    VaultOpen,
 )
 from domain.vault.vault_crud import (
     create_vault,
     get_vaults,
     get_vault_by_user_id,
     update_vault,
+    open_vault,
 )
 from domain.user.user_crud import get_user_by_id
 from domain.user.user_router import get_current_user
@@ -39,7 +41,7 @@ def get_user_vault(
     current_user: User = Depends(get_current_user),
 ):
     """
-    Returns current user's vault.
+    Returns current user's vault info.
     """
     return get_vault_by_user_id(db, current_user.id)
 
@@ -52,5 +54,19 @@ def vault_update(
 ) -> VaultResponse:
     """
     Vault update endpoint.
+    Returns the updated vault with new name.
     """
     return update_vault(db, vault_update, current_user)
+
+
+@router.put("/open")
+def vault_open(
+    vault_open: VaultOpen,
+    current_user: User = Depends(get_current_user),
+) -> bool:
+    """
+    Checks user input against user password and "opens" the vault
+    if verified. It will either raise HTTP 401 response (if not verified)
+    or True (if verified).
+    """
+    return open_vault(vault_open, current_user)
