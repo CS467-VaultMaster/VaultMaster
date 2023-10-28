@@ -9,12 +9,8 @@ import Profile from "./pages/Profile";
 
 // FastAPI endpoint URL, defined so that you can run React either locally or in the container w/o issues.
 // Looked into how best to pass this - useContext()? set the value on window? - but I'll let you pick. (- Will)
-<<<<<<< HEAD
 export const FASTAPI_BASE_URL =
   process.env.REACT_APP_FASTAPI_URL || "http://127.0.0.1:8000";
-=======
-export const FASTAPI_BASE_URL = process.env.REACT_APP_FASTAPI_URL || "http://127.0.0.1:8000";
->>>>>>> 22d9aa2 (Correct typo in FastAPI URL envar)
 
 function PrivateRoute({ children, isAuthenticated }) {
   const navigate = useNavigate();
