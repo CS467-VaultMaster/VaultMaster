@@ -16,7 +16,7 @@ def _get_aws_token(PG_HOST) -> str:
     PG_USER = os.environ["POSTGRES_USER"]
     PG_AWS_REGION = os.environ["PG_AWS_REGION"]
     
-    session = boto3.Session()
+    session = boto3.Session(region_name=PG_AWS_REGION)
     client = session.client('rds')
 
     token = client.generate_db_auth_token(DBHostname=PG_HOST, Port="5432", \
