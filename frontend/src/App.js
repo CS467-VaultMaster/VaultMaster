@@ -32,13 +32,13 @@ function App() {
   useEffect(() => {
     const token = sessionStorage.getItem("authToken");
     if (token) {
-      console.log(token)
+      console.log(token);
       setIsAuthenticated(true);
     }
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken")  // Delete token from local storage
+    sessionStorage.removeItem("authToken"); // Delete token from local storage
     setIsAuthenticated(false);
     navigate("/login");
   };
@@ -53,7 +53,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/vault" replace />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route
+            path="/login"
+            element={<Login setIsAuthenticated={setIsAuthenticated} />}
+          />
           <Route
             path="/tools"
             element={
@@ -71,7 +74,9 @@ function App() {
           <Route
             path="/profile"
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>{<Profile />}</PrivateRoute>
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                {<Profile handleLogout={handleLogout} />}
+              </PrivateRoute>
             }
           />
         </Routes>
