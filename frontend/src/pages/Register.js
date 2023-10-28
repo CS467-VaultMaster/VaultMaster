@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GeneratePassword from "../components/GeneratePassword";
+import { passwordComplexity, hasPasswordBeenPwned } from "../utilities/passwordUtils";
 import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("HomerJSimpson");
-  const [password1, setPassword1] = useState("password123");
-  const [password2, setPassword2] = useState("password123");
-  const [email, setEmail] = useState("homer@email.com");
-  const [firstName, setFirstName] = useState("Homer");
-  const [lastName, setLastName] = useState("Simpson");
+  const [username, setUsername] = useState("MontyBurns");
+  const [password1, setPassword1] = useState("areallygoodpassword915");
+  const [password2, setPassword2] = useState("areallygoodpassword915");
+  const [email, setEmail] = useState("mburns@email.com");
+  const [firstName, setFirstName] = useState("Monty");
+  const [lastName, setLastName] = useState("Burns");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -20,16 +21,8 @@ export default function Register() {
     return re.test(email);
   };
 
-  const checkPasswordComplexity = (pwd) => {
-    // TODO enhance this function with special char requirements, etc.
-    if (pwd.length < 8) {
-      return "Password must be at least 8 characters long.";
-    }
-    // May want to check against a list of poor passwords as well
-    return "";
-  };
-
   const handleRegistration = async (e) => {
+    setPasswordError("");
     e.preventDefault();
 
     if (password1 !== password2) {
@@ -38,14 +31,23 @@ export default function Register() {
       return;
     }
 
-    if (!isValidEmail(email)) {
-      setGeneralError("Please enter a valid email address.");
+    if (!passwordComplexity(password1)) {
+      setPasswordError("Password must be at least 8 characters long.");
       return;
+    } else {
+      const isPwnd = await hasPasswordBeenPwned(password1);
+      if (isPwnd) {
+        setPasswordError(
+          "This password has appeared in a breach. Please pick a stronger one."
+        );
+        setPassword1("");
+        setPassword2("");
+        return;
+      }
     }
 
-    const pwdError = checkPasswordComplexity(password1);
-    if (pwdError) {
-      setPasswordError(pwdError);
+    if (!isValidEmail(email)) {
+      setGeneralError("Please enter a valid email address.");
       return;
     }
 
@@ -139,7 +141,6 @@ export default function Register() {
             required
           />
           <GeneratePassword />
-          {passwordError && <p className="error">{passwordError}</p>}
         </div>
 
         <div className="input-group">
@@ -151,6 +152,7 @@ export default function Register() {
             onChange={(e) => setPassword2(e.target.value)}
             required
           />
+          {passwordError && <p className="error">{passwordError}</p>}
         </div>
 
         <div className="input-group">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { passwordComplexity, hasPasswordBeenPwned } from "../utilities/passwordUtils";
 
 export default function Profile({ handleLogout }) {
   const [userData, setUserData] = useState({
@@ -28,7 +29,7 @@ export default function Profile({ handleLogout }) {
           `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/user/account`,
           { headers }
         );
-        setUserData(response.data);
+        setUserData((prevData) => ({ ...prevData, ...response.data }));
         console.log(response.data);
       } catch (error) {
         setErrorMessage("No token found!");
@@ -53,6 +54,21 @@ export default function Profile({ handleLogout }) {
       return;
     }
 
+    if (!passwordComplexity(password1)) {
+      setErrorMessage("Passwords must be at least 8 characters.");
+      setUserData((prevData) => ({ ...prevData, password1: "", password2: "" }));
+      return;
+    } else {
+      const isPwnd = await hasPasswordBeenPwned(password1);
+      if (isPwnd) {
+        setErrorMessage(
+          "This password has appeared in a breach. Please pick a stronger one."
+        );
+        setUserData((prevData) => ({ ...prevData, password1: "", password2: "" }));
+        return;
+      }
+    }
+
     const token = sessionStorage.getItem("authToken");
     if (!token) {
       console.error("No token found.");
@@ -70,6 +86,7 @@ export default function Profile({ handleLogout }) {
         { headers }
       );
       setSuccessMessage("Profile updated successfully!");
+      setErrorMessage("");
     } catch (error) {
       console.error("Error updating profile:", error);
     }
