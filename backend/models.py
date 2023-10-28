@@ -53,7 +53,7 @@ class Credential(Base):
     category = Column(String, nullable=True)
     url = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    node = Column(Text, nullable=True)
+    note = Column(Text, nullable=True)
     created = Column(DateTime, nullable=False)
     modified = Column(DateTime, nullable=False)
     vault_id = Column(String, ForeignKey("vault.id"))
