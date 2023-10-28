@@ -6,7 +6,7 @@ from db_auth import get_db_auth
 
 # Conceal secrets in .env file
 POSTGRES_USER = os.environ["POSTGRES_USER"]
-POSTGRES_DB = os.environ["POSTGRES_DB"]
+POSTGRES_DB = os.environ.get("POSTGRES_DB", POSTGRES_USER)
 # Allows interop between docker-compose and local dev
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
 # Pulls AWS auth token if run in cloud; otherwise, pulls from local env
