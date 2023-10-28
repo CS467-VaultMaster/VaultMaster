@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GeneratePassword from "../components/GeneratePassword";
 import axios from "axios";
 
@@ -14,7 +14,7 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  
+
   const isValidEmail = (email) => {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return re.test(email);
@@ -52,34 +52,39 @@ export default function Register() {
     setPasswordError(""); // Reset password error and proceed with registration
 
     try {
-      alert(process.env.REACT_APP_BASE_URL)
-      console.log(username, password1)
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/vaultmaster/user/register`, {
-        username: username,
-        password1: password1,
-        password2: password2,
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/user/register`,
+        {
+          username: username,
+          password1: password1,
+          password2: password2,
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+        }
+      );
 
-
-      if (response.data.success) {
+      if (response.status === 200) {
+        console.log(response.data);
         setSuccessMessage("Registration successful! Redirecting to login...");
         setTimeout(() => {
           navigate("/login");
         }, 2000);
-        console.log(response.data);
       } else {
         setGeneralError(
           response.data.message || "An error occurred during registration."
         );
       }
     } catch (error) {
-      const errorMessage =
-        error.response && error.response.data && error.response.data.message
-          ? error.response.data.message
-          : "Error registering user. Please try again.";
+      let errorMessage = "Error registering user. Please try again.";
+
+      if (error.response) {
+        if (error.response.status === 409) {
+          errorMessage = "This user already exists.";
+        } else if (error.response.data && error.response.data.detail) {
+          errorMessage = error.response.data.detail;
+        }
+      }
       setGeneralError(errorMessage);
       console.error("Error registering user:", error.response);
     }
@@ -88,7 +93,8 @@ export default function Register() {
   return (
     <div className="register page">
       <h2>Register</h2>
-      {successMessage && <p className="success">{successMessage}</p>}{" "}
+      {successMessage && <p className="success">{successMessage}</p>}
+      {generalError && <p className="error">{generalError}</p>}
       {/* Display success message to user */}
       <form onSubmit={handleRegistration}>
         <div className="input-group">
@@ -160,6 +166,10 @@ export default function Register() {
         </div>
 
         <button type="submit">Register</button>
+
+        <div className="register-link">
+          <Link to="/login">Login</Link>
+        </div>
       </form>
     </div>
   );
