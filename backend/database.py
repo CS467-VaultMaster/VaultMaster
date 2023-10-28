@@ -14,7 +14,7 @@ POSTGRES_PASSWORD = get_db_auth()
 
 DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 
-# set up SSL certs as needed for SQLAlchemy
+# set up SSL certs for SQLAlchemy (only req. if running on AWS)
 PG_SSLCERT = os.environ.get("PG_SSLCERT", False)
 if PG_SSLCERT:
     SQLA_CONNECT_ARGS = {
