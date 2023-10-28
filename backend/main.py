@@ -33,7 +33,7 @@ from db_auth import get_db_auth
 POSTGRES_USER = os.environ["POSTGRES_USER"]
 POSTGRES_DB = os.environ["POSTGRES_DB"]
 POSTGRES_PASSWORD = get_db_auth()
-PG_SSLCERT = os.environ["PG_SSLCERT"]
+PG_SSLCERT = os.environ.get("PG_SSLCERT", "")
 # Allows interop between docker-compose and local dev
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
 
