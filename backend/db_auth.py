@@ -3,7 +3,7 @@ import os
 
 def get_db_auth() -> str:
     # Get host of DB from env (default "localhost" = running FastAPI locally, non-containerized)
-    PG_HOST = os.environ.get("PG_HOST", "localhost")
+    PG_HOST = os.environ.get("POSTGRES_HOST", "localhost")
 
     # If not running in AWS, return passwd variable from env
     if not PG_HOST.endswith("rds.amazonaws.com"):
