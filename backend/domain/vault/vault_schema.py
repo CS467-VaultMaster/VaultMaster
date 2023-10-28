@@ -22,6 +22,16 @@ class VaultUpdate(BaseModel):
         return v
 
 
+class VaultOpen(BaseModel):
+    password: str
+
+    @validator("password")
+    def not_empty(cls, v):
+        if not v or not v.strip():
+            raise ValueError("Vault password cannot be empty.")
+        return v
+
+
 class VaultResponse(BaseModel):
     id: str
     vault_name: str

@@ -60,6 +60,7 @@ def register(
 ) -> User:
     """
     User registration endpoint.
+    Returns the new user info.
     """
     user = get_existing_user(db, user_create=user_create)
     if user:
@@ -89,6 +90,7 @@ def user_update(
 ) -> UserResponse:
     """
     User profile update endpoint.
+    Returns the user info with updated data.
     """
     return update_user(db=db, user_update=user_update, current_user=current_user)
 
@@ -100,6 +102,7 @@ def user_remove(
 ):
     """
     This endpoint removes the user self from the database.
+    The user's vault is also removed from this endpoint.
     """
     remove_user(db, current_user)
 
