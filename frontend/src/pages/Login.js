@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Login({setIsAuthenticated}) {
+export default function Login({ setIsAuthenticated }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -21,21 +21,21 @@ export default function Login({setIsAuthenticated}) {
         formData.toString(),
         {
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          }
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
         }
       );
 
       if (response.status === 200) {
         sessionStorage.setItem("authToken", response.data.access_token);
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
         navigate("/vault");
-      } 
+      }
     } catch (error) {
       console.log(error.response.data.detail);
       let errorMessage = "Error logging in. Please try again.";
-      setPassword("")
-      setUsername("")
+      setPassword("");
+      setUsername("");
       setLoginError(errorMessage);
     }
   };
