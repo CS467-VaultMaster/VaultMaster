@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Login() {
+export default function Login({setIsAuthenticated}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -12,27 +12,30 @@ export default function Login() {
     e.preventDefault();
 
     try {
+      const formData = new URLSearchParams();
+      formData.append("username", username);
+      formData.append("password", password);
+
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/vaultmaster/user/login`,
+        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/user/login`,
+        formData.toString(),
         {
-          username: username,
-          password: password,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
         }
       );
 
-      console.log(response.data)
-
-      if (response.data && response.data.token) {
-        localStorage.setItem("authToken", response.data.token);
-        navigate("/dashboard");
-      } else {
-        setLoginError("Authentication failed. Please check your credentials.");
-      }
+      if (response.status === 200) {
+        sessionStorage.setItem("authToken", response.data.access_token);
+        setIsAuthenticated(true)
+        navigate("/vault");
+      } 
     } catch (error) {
-      const errorMessage =
-        error.response && error.response.data && error.response.data.detail
-          ? error.response.data.detail
-          : "Error logging in. Please try again.";
+      console.log(error.response.data.detail);
+      let errorMessage = "Error logging in. Please try again.";
+      setPassword("")
+      setUsername("")
       setLoginError(errorMessage);
     }
   };
@@ -67,7 +70,7 @@ export default function Login() {
         <button type="submit">Login</button>
       </form>
 
-      <div className="login-links">
+      <div className="login-link">
         <Link to="/register">Register</Link>
       </div>
     </div>
