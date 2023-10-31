@@ -23,3 +23,16 @@ def _get_aws_token(PG_HOST) -> str:
                                           DBUsername=PG_USER, Region=PG_AWS_REGION)
 
     return token    
+
+def get_db_url() -> str:
+    # Conceal secrets in .env file
+    POSTGRES_USER = os.environ["POSTGRES_USER"]
+    POSTGRES_DB = os.environ.get("POSTGRES_DB", POSTGRES_USER)
+    # Allows interop between docker-compose and local dev
+    POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
+    # Pulls AWS auth token if run in cloud; otherwise, pulls from local env
+    POSTGRES_PASSWORD = get_db_auth()
+
+    DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
+
+    return DATABASE_URL

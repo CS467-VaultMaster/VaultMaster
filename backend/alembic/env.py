@@ -7,6 +7,7 @@ from alembic import context
 
 import os,sys
 from dotenv import load_dotenv
+from db_auth import get_db_url
 
 BASE_DIR= os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -18,7 +19,7 @@ sys.path.append(BASE_DIR)
 config = context.config
 
 #  Making a connection
-config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
+config.set_main_option('sqlalchemy.url', get_db_url())
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
