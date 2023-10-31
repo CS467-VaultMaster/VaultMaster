@@ -14,15 +14,26 @@ function VaultDashboard() {
   };
 
   const handlePasswordSubmit = async () => {
+    const token = sessionStorage.getItem("authToken");
+
+    if (!token) {
+      console.error("Token not found!");
+      return;
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
     try {
       setErrorMessage("");
-      console.log(`Password: ${password}`)
+      console.log(`Password: ${password}`);
       // Getting a 401 for some reason even with the correct password
       const response = await axios.put(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/vault/open`,
         {
           password: password,
-        }
+        },
+        { headers }
       );
       if (response.status === 200) {
         setIsPwdVerified(true);
