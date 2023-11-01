@@ -32,11 +32,11 @@ class CredentialUpdate(BaseModel):
 
 class CredentialResponse(BaseModel):
     id: str
-    nickname: str
-    category: str
+    nickname: str | None
+    category: str | None
     url: str
     password: str
-    note: str
+    note: str | None
     created: datetime
     modified: datetime
     #vault_id: str
