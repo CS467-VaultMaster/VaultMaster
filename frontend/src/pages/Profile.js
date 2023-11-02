@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { passwordComplexity, hasPasswordBeenPwned } from "../utilities/passwordUtils";
 
 export default function Profile({ handleLogout }) {
@@ -110,7 +110,7 @@ export default function Profile({ handleLogout }) {
       };
 
       try {
-        const response = await axios.delete(
+        await axios.delete(
           `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/user/account`,
           { headers }
         );

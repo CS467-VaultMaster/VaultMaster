@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes, Link, Navigate, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import VaultDashboard from "./pages/VaultDashboard";
 import Login from "./pages/Login";
