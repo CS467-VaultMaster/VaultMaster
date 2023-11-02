@@ -1,6 +1,6 @@
 import React from 'react'
-import ExportPasswords from "../components/ExportPasswords"
-import GeneratePassword from "../components/GeneratePassword"
+// import ExportPasswords from "../components/ExportPasswords"
+// import GeneratePassword from "../components/GeneratePassword"
 
 export default function Tools() {
   return (
