@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
 import axios from "axios";
+import AddCredential from "../components/AddCredential";
+import CredentialsTable from "../components/CredentialsTable";
 
 function VaultDashboard() {
   const [credentials, setCredentials] = useState([]);
@@ -27,7 +29,7 @@ function VaultDashboard() {
     try {
       setErrorMessage("");
       console.log(`Password: ${password}`);
-      // Getting a 401 for some reason even with the correct password
+      // Need to provide token
       const response = await axios.put(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/vault/open`,
         {
@@ -88,30 +90,11 @@ function VaultDashboard() {
       ) : (
         <div>
           {successMessage && <p>{successMessage}</p>}
-          {credentials.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Nickname</th>
-                  <th>URL</th>
-                  <th>Password</th>
-                  <th>Category</th>
-                </tr>
-              </thead>
-              <tbody>
-                {credentials.map((credential) => (
-                  <tr key={credential.id}>
-                    <td>{credential.nickname}</td>
-                    <td>{credential.url}</td>
-                    <td>{credential.password}</td>
-                    <td>{credential.category}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No credentials found.</p>
-          )}
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          <AddCredential
+            onAdd={(newCredential) => setCredentials([...credentials, newCredential])}
+          />
+          <CredentialsTable credentials={credentials} />
         </div>
       )}
     </div>
