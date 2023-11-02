@@ -56,5 +56,6 @@ class Credential(Base):
     note = Column(Text, nullable=True)
     created = Column(DateTime, nullable=False)
     modified = Column(DateTime, nullable=False)
+    fernet_key = Column(String, nullable=False)
     vault_id = Column(String, ForeignKey("vault.id"))
     vault = relationship("Vault", backref="vault")
