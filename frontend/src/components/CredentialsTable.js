@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CredentialsTable() {
+export default function CredentialsTable({ credentials }) {
   return (
     <div>
       <h3>Credentials</h3>
