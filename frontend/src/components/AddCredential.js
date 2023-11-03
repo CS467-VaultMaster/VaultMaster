@@ -18,7 +18,12 @@ function AddCredential({ onAdd }) {
 
       const response = await axios.post(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential`,
-        { nickname, url, password, category, note },
+        { nickname: nickname, 
+          url: url, 
+          password: password, 
+          category: category, 
+          note: note 
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,23 +47,23 @@ function AddCredential({ onAdd }) {
     <div>
       <h3>Add Credential</h3>
       <label>
-        Nickname:
+        Nickname
         <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
       </label>
       <label>
-        URL:
+        URL
         <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
       </label>
       <label>
-        Password:
+        Password
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </label>
       <label>
-        Category:
+        Category
         <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
       </label>
       <label>
-        Note:
+        Note
         <input type="text" placeholder='optional' value={note} onChange={(e) => setNote(e.target.value)} />
       </label>
       <button onClick={handleSubmit}>Add</button>
