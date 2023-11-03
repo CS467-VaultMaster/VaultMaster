@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function AddCredential({ onAdd }) {
-  const [nickname, setNickname] = useState('');
-  const [url, setUrl] = useState('');
-  const [password, setPassword] = useState('');
-  const [category, setCategory] = useState('');
+  const [nickname, setNickname] = useState('Amazon');
+  const [url, setUrl] = useState('amazon.ca');
+  const [password, setPassword] = useState('password');
+  const [category, setCategory] = useState('shopping');
+  const [note, setNote] = useState('sample note')
 
   const handleSubmit = async () => {
     try {
@@ -16,8 +17,8 @@ function AddCredential({ onAdd }) {
       }
 
       const response = await axios.post(
-        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credentials`,
-        { nickname, url, password, category },
+        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential`,
+        { nickname, url, password, category, note },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,6 +56,10 @@ function AddCredential({ onAdd }) {
       <label>
         Category:
         <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
+      </label>
+      <label>
+        Note:
+        <input type="text" placeholder='optional' value={note} onChange={(e) => setNote(e.target.value)} />
       </label>
       <button onClick={handleSubmit}>Add</button>
     </div>

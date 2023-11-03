@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CredentialsTable({ credentials }) {
+export default function CredentialsTable({ credentials, onEdit, onDelete }) {
   return (
     <div>
       <h3>Credentials</h3>
@@ -12,6 +12,7 @@ export default function CredentialsTable({ credentials }) {
               <th>URL</th>
               <th>Password</th>
               <th>Category</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -21,6 +22,10 @@ export default function CredentialsTable({ credentials }) {
                 <td>{credential.url}</td>
                 <td>{credential.password}</td>
                 <td>{credential.category}</td>
+                <td>
+                  <button onClick={() => onEdit(index)}>Edit</button>
+                  <button onClick={() => onDelete(index)}>Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>
