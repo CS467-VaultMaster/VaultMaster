@@ -13,6 +13,7 @@ from domain.credential.credential_crud import (
     get_credentials,
     update_credential,
     remove_credential,
+    get_creds_raw_format,
 )
 from domain.user.user_router import get_current_user
 from models import (
@@ -28,7 +29,7 @@ router = APIRouter(prefix="/vaultmaster/credential")
 def get_user_credential(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> list[CredentialResponse] | list:
     return get_credentials(db, current_user)
 
 
@@ -37,7 +38,7 @@ def credential_create(
     credential_create: CredentialCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> Credential:
+) -> CredentialResponse:
     return create_credential(db, current_user, credential_create)
 
 
@@ -59,3 +60,10 @@ def credential_remove(
     current_user: User = Depends(get_current_user),
 ):
     return remove_credential(db, credential_id, current_user)
+
+@router.get("/credential/db")
+def credential_get_db(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_creds_raw_format(db, current_user)

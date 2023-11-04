@@ -28,16 +28,26 @@ def create_credential(
         nickname=credential_create.nickname,
         category=credential_create.category,
         url=credential_create.url,
-        password=cred_password,
+        password=cred_password.decode(),
         note=credential_create.note,
         created=datetime.utcnow(),
         modified=datetime.utcnow(),
-        fernet_key=fernet_key,
+        fernet_key=fernet_key.decode(),
         vault=user_vault,
     )
     db.add(db_credential)
     db.commit()
-    return get_credential_by_id(db, db_credential.id)
+    credential = get_credential_by_id(db, db_credential.id)
+    return CredentialResponse(
+        id=credential.id,
+        nickname=credential.nickname,
+        category=credential.category,
+        url=credential.url,
+        password=credential.password,
+        note=credential.note,
+        created=credential.created,
+        modified=credential.modified,
+    )
 
 
 def update_credential(
@@ -65,10 +75,28 @@ def remove_credential(db: Session, credential_id: str, current_user: User):
     db.commit()
 
 
-def get_credentials(db: Session, user: User):
+def get_credentials(db: Session, user: User) -> list[CredentialResponse]:
     user_vault = get_vault_by_user_id(db, user.id)
+    return_lst = []
+    credential_lst = (
+        db.query(Credential).filter(Credential.vault_id == user_vault.id).all()
+    )
+    for credential in credential_lst:
+        # Decrypt the password.
+        decrypted_pwd = double_decrypt(user.id, credential)
+        credential = CredentialResponse(
+            id=credential.id,
+            nickname=credential.nickname,
+            category=credential.category,
+            url=credential.url,
+            password=decrypted_pwd,
+            note=credential.note,
+            created=credential.created,
+            modified=credential.modified,
+        )
+        return_lst.append(credential)
 
-    return db.query(Credential).filter(Credential.vault_id == user_vault.id).all()
+    return return_lst
 
 
 def get_credential_by_id(db: Session, credential_id: str) -> Credential | None:
@@ -76,21 +104,31 @@ def get_credential_by_id(db: Session, credential_id: str) -> Credential | None:
 
 
 def double_encrypt(user_id: str, cred_password: str) -> list[str]:
+    # First encryption.
     fernet_key = Fernet.generate_key()
     f = Fernet(fernet_key)
     encrypted_password = f.encrypt(cred_password.encode())
 
     fernet_key_decoded = fernet_key.decode()
     encrypted_password_decoded = encrypted_password.decode()
-
+    # Second encryption.
     cipher_fernet_key = cipher_encrypt(user_id, fernet_key_decoded)
     cipher_cred_password = cipher_encrypt(user_id, encrypted_password_decoded)
 
     return [cipher_fernet_key, cipher_cred_password]
 
 
-def double_decrypt(user_id: str, cred_password: str) -> list[str]:
-    pass
+def double_decrypt(user_id: str, credential: Credential) -> StopAsyncIteration:
+    db_fernet_key = credential.fernet_key
+    db_password = credential.password
+    # Un-doing the second encryption.
+    deciphered_fernet_key = cipher_decrypt(user_id, db_fernet_key)
+    deciphered_password = cipher_decrypt(user_id, db_password)
+    # Un-doing the first encryption.
+    f = Fernet(deciphered_fernet_key)
+    decrypted_password = f.decrypt(deciphered_password)
+
+    return decrypted_password.decode()
 
 
 def cipher_encrypt(password: str, data: str) -> str:
@@ -101,7 +139,19 @@ def cipher_encrypt(password: str, data: str) -> str:
 
 
 def cipher_decrypt(password: str, data: str) -> str:
-    decrypted_str = subprocess.check_output(
-        ["./cipher_cmd", "dec", f"{password}", f"{data}"]
-    )
+    try:
+        decrypted_str = subprocess.check_output(
+            ["./cipher_cmd", "dec", f"{password}", f"{data}"]
+        )
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            "command '{}' return with error (code {}): {}".format(
+                e.cmd, e.returncode, e.output
+            )
+        )
     return decrypted_str
+
+
+def get_creds_raw_format(db: Session, user: User):
+    user_vault = get_vault_by_user_id(db, user.id)
+    return db.query(Credential).filter(Credential.vault_id == user_vault.id).all()
