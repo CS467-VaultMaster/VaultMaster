@@ -76,22 +76,30 @@ function VaultDashboard() {
   };
 
   const handleAddCredential = (newCredential) => {
-    setCredentials(prevCredentials => [...prevCredentials, newCredential])
-  }
+    setCredentials((prevCredentials) => [...prevCredentials, newCredential]);
+  };
 
   const handleEditCredential = (index) => {
     // logic to handle editing a credential
     console.log("Edit credential at index:", index);
   };
 
+  const handleEditComplete = (id, updatedCredential) => {
+    setCredentials((prevCredentials) =>
+      prevCredentials.map((cred) =>
+        cred.id === id ? { ...cred, updatedCredential } : cred
+      )
+    );
+  };
+
   const handleDeleteCredential = async (id) => {
     try {
-      const token = sessionStorage.getItem('authToken');
+      const token = sessionStorage.getItem("authToken");
       if (!token) {
-        console.error('No authentication token found.');
+        console.error("No authentication token found.");
         return;
       }
-  
+
       // Make DELETE request to API endpoint
       const response = await axios.delete(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`,
@@ -101,15 +109,18 @@ function VaultDashboard() {
           },
         }
       );
-  
+
       // If the DELETE operation was successful, remove the credential from the local state
-      if (response.status === 204) { // Check for successful response status
-        const updatedCredentials = credentials.filter(credential => credential.id !== id);
+      if (response.status === 204) {
+        // Check for successful response status
+        const updatedCredentials = credentials.filter(
+          (credential) => credential.id !== id
+        );
         setCredentials(updatedCredentials);
         console.log("Deleted credential with ID:", id);
       }
     } catch (error) {
-      console.error('Error deleting credential:', error);
+      console.error("Error deleting credential:", error);
     }
   };
 
@@ -133,6 +144,7 @@ function VaultDashboard() {
           <CredentialsTable
             credentials={credentials}
             onEdit={handleEditCredential}
+            onEditComplete={handleEditComplete}
             onDelete={handleDeleteCredential}
           />
         </div>

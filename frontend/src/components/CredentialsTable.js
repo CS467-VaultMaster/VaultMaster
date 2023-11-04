@@ -1,6 +1,37 @@
-import React from "react";
+import React, {useState} from "react";
+import axios from 'axios'
 
 export default function CredentialsTable({ credentials, onEditComplete, onDelete }) {
+  const [editingId, setEditingId] = useState(null)
+  const [editedCredential, setEditedCredential] = useState({})
+  
+  const handleEdit = (credential) => {
+    setEditingId(credential.id)
+    setEditedCredential({...credential})  // Clone credential to edit
+  }
+
+  const handleSave = async (id) => {
+    try {
+      const token = sessionStorage.getItem('authToken')
+      await axios.put(`${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`, editedCredential, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      onEditComplete(id, editedCredential)
+      setEditingId(null)  // Exit editing mode
+    } catch (error) {
+      console.error('Error updating credential:', error)
+    }
+  }
+
+  const handleChange = (e, field) => {
+    setEditedCredential({
+      ...editedCredential,
+      [field]: e.target.value
+    })
+  }
+
   return (
     <div className="table-container">
       <h3>Credentials</h3>

@@ -51,6 +51,7 @@ h3 {
 nav {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   background: #333;
   padding: 10px;
 }
@@ -58,7 +59,7 @@ nav {
 nav a {
   color: #fff;
   text-decoration: none;
-  padding: 5px 10px;
+  padding: 10px 15px;
   margin: 0 5px;
   border-radius: 5px;
   transition: background 0.2s;
