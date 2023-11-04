@@ -26,13 +26,14 @@ from models import (
 
 router = APIRouter(prefix="/vaultmaster/vault")
 
-
+'''
 @router.get("/all")
 def get_all_vaults(db: Session = Depends(get_db)):
     """
     TODO: REMOVE THIS - TEST ENDPOINT.
     """
     get_vaults(db)
+'''
 
 
 @router.get("/")
