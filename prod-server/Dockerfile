@@ -3,6 +3,8 @@ FROM node:latest as npm-build-stage
 
 WORKDIR /frontend
 
+ENV NODE_ENV production
+
 COPY frontend/package.json frontend/package-lock.json /frontend/
 
 RUN npm install
