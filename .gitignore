@@ -9,6 +9,7 @@ __pycache__
 
 # React stuff
 node_modules
+frontend/build
 
 # ENV files
 *.env*
