@@ -20,7 +20,7 @@ COPY --from=npm-build-stage /frontend/build /usr/share/nginx/html
 
 # TODO: copy config files over from . (/nginx)
 
-EXPOSE 80 
+EXPOSE 80 443
 
 # TODO: Tweak this command with any params needed 
 CMD ["nginx", "-g", "daemon off;"]

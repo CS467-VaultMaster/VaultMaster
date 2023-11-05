@@ -16,3 +16,4 @@ services:
       context: ./
     ports:
       - "80:80"
+      - "443:443"
