@@ -57,13 +57,15 @@ def update_credential(
     current_user: User,
 ) -> Credential:
     credential = get_credential_by_id(db, credential_id)
+    fernet_key, cred_password = double_encrypt(current_user.id, credential_update.password)
     # TODO: Check if the user has access to this credential.
     credential.nickname = (credential_update.nickname,)
     credential.category = (credential_update.category,)
     credential.url = (credential_update.url,)
-    credential.password = (credential_update.password,)
+    credential.password = cred_password.decode(),
     credential.note = (credential_update.note,)
     credential.modified = datetime.utcnow()
+    credential.fernet_key = fernet_key.decode()
     db.add(credential)
     db.commit()
     return get_credential_by_id(db, credential_id)
