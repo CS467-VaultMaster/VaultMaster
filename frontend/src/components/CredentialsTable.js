@@ -3,22 +3,39 @@ import axios from 'axios'
 
 export default function CredentialsTable({ credentials, onEditComplete, onDelete }) {
   const [editingId, setEditingId] = useState(null)
-  const [editedCredential, setEditedCredential] = useState({})
+  const [editForm, setEditForm] = useState({
+    nickname: "",
+    category: "",
+    url: "",
+    password: "",
+    note: ""
+  });
   
   const handleEdit = (credential) => {
-    setEditingId(credential.id)
-    setEditedCredential({...credential})  // Clone credential to edit
-  }
+    setEditingId(credential.id);
+    setEditForm({
+      nickname: credential.nickname,
+      category: credential.category,
+      url: credential.url,
+      password: credential.password,
+      note: credential.note
+    });
+  };
 
   const handleSave = async (id) => {
+    console.log(
+      editForm
+    )
     try {
       const token = sessionStorage.getItem('authToken')
-      await axios.put(`${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`, editedCredential, {
+      await axios.put(`${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`, 
+      editForm, 
+      {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-      onEditComplete(id, editedCredential)
+      // onEditComplete(id, editedCredential)
       setEditingId(null)  // Exit editing mode
     } catch (error) {
       console.error('Error updating credential:', error)
@@ -26,11 +43,11 @@ export default function CredentialsTable({ credentials, onEditComplete, onDelete
   }
 
   const handleChange = (e, field) => {
-    setEditedCredential({
-      ...editedCredential,
+    setEditForm({
+      ...editForm,
       [field]: e.target.value
-    })
-  }
+    });
+  };
 
   return (
     <div className="table-container">
@@ -55,20 +72,20 @@ export default function CredentialsTable({ credentials, onEditComplete, onDelete
                 {/* Editable fields */}
                 {isEditing ? (
                   <>
-                    <td><input type="text" value={editedCredential.nickname} onChange={(e) => handleChange(e, 'nickname')} /></td>
-                    <td><input type="text" value={editedCredential.url} onChange={(e) => handleChange(e, 'url')} /></td>
+                    <td><input type="text" value={editForm.nickname} onChange={(e) => handleChange(e, 'nickname')} /></td>
+                    <td><input type="text" value={editForm.url} onChange={(e) => handleChange(e, 'url')} /></td>
                     <td>
-                      <input type="password" value={editedCredential.password} onChange={(e) => handleChange(e, 'password')} />
+                      <input type="text" value={editForm.password} onChange={(e) => handleChange(e, 'password')} />
                     </td>
-                    <td><input type="text" value={editedCredential.category} onChange={(e) => handleChange(e, 'category')} /></td>
-                    <td><input type="text" value={editedCredential.note} onChange={(e) => handleChange(e, 'note')} /></td>
+                    <td><input type="text" value={editForm.category} onChange={(e) => handleChange(e, 'category')} /></td>
+                    <td><input type="text" value={editForm.note} onChange={(e) => handleChange(e, 'note')} /></td>
                   </>
                 ) : (
                   // Non-editable display
                   <>
                     <td>{credential.nickname}</td>
                     <td>{credential.url}</td>
-                    <td>{'•'.repeat(credential.password.length)}</td>
+                    <td>{credential.password}</td>
                     <td>{credential.category}</td>
                     <td>{credential.note}</td>
                   </>

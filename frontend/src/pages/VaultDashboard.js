@@ -62,7 +62,7 @@ function VaultDashboard() {
       }
 
       const response = await axios.get(
-        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential`,
+        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -75,21 +75,29 @@ function VaultDashboard() {
     }
   };
 
-  const handleAddCredential = (newCredential) => {
-    setCredentials((prevCredentials) => [...prevCredentials, newCredential]);
-  };
+  // const handleAddCredential = (newCredential) => {
+  //   setCredentials((prevCredentials) => [...prevCredentials, newCredential]);
+  // };
 
-  const handleEditCredential = (index) => {
-    // logic to handle editing a credential
-    console.log("Edit credential at index:", index);
-  };
+  const handleAddCredential = () => {
+    fetchCredentials();
+  }
 
-  const handleEditComplete = (id, updatedCredential) => {
-    setCredentials((prevCredentials) =>
-      prevCredentials.map((cred) =>
-        cred.id === id ? { ...cred, updatedCredential } : cred
-      )
-    );
+  // const handleEditCredential = (index) => {
+  //   // logic to handle editing a credential
+  //   console.log("Edit credential at index:", index);
+  // };
+
+  // const handleEditComplete = (id, updatedCredential) => {
+  //   setCredentials((prevCredentials) =>
+  //     prevCredentials.map((cred) =>
+  //       cred.id === id ? { ...cred, updatedCredential } : cred
+  //     )
+  //   );
+  // };
+
+  const handleEditComplete = () => {
+    // fetchCredentials();
   };
 
   const handleDeleteCredential = async (id) => {
@@ -100,7 +108,6 @@ function VaultDashboard() {
         return;
       }
 
-      // Make DELETE request to API endpoint
       const response = await axios.delete(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`,
         {
@@ -110,13 +117,8 @@ function VaultDashboard() {
         }
       );
 
-      // If the DELETE operation was successful, remove the credential from the local state
       if (response.status === 204) {
-        // Check for successful response status
-        const updatedCredentials = credentials.filter(
-          (credential) => credential.id !== id
-        );
-        setCredentials(updatedCredentials);
+        fetchCredentials()
         console.log("Deleted credential with ID:", id);
       }
     } catch (error) {
@@ -139,11 +141,12 @@ function VaultDashboard() {
       ) : (
         <div>
           {successMessage && <p>{successMessage}</p>}
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          {/* {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} */}
           <AddCredential onAdd={handleAddCredential} />
+          {/* <AddCredential/> */}
           <CredentialsTable
             credentials={credentials}
-            onEdit={handleEditCredential}
+            // onEdit={handleEditCredential}
             onEditComplete={handleEditComplete}
             onDelete={handleDeleteCredential}
           />

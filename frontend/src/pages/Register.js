@@ -6,12 +6,12 @@ import axios from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("MontyBurns");
-  const [password1, setPassword1] = useState("areallygoodpassword915");
-  const [password2, setPassword2] = useState("areallygoodpassword915");
-  const [email, setEmail] = useState("mburns@email.com");
-  const [firstName, setFirstName] = useState("Monty");
-  const [lastName, setLastName] = useState("Burns");
+  const [username, setUsername] = useState("HomerSimpson");
+  const [password1, setPassword1] = useState("goodpassword321");
+  const [password2, setPassword2] = useState("goodpassword321");
+  const [email, setEmail] = useState("homer@email.com");
+  const [firstName, setFirstName] = useState("Homer");
+  const [lastName, setLastName] = useState("Simpson");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
