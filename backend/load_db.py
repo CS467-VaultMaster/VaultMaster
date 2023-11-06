@@ -17,7 +17,7 @@ def load_db(path: str) -> bool:
                                 port="5432", 
                                 database=POSTGRES_DB,
                                 user=POSTGRES_USER,
-                                pasword=POSTGRES_PASSWORD,
+                                password=POSTGRES_PASSWORD,
                                 sslrootcert=PG_SSLCERT)
         
         cursor = conn.cursor()
