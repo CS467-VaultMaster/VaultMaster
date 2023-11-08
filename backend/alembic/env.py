@@ -19,7 +19,7 @@ sys.path.append(BASE_DIR)
 config = context.config
 
 #  Making a connection
-config.set_main_option('sqlalchemy.url', get_db_url())
+config.set_main_option('sqlalchemy.url', get_db_url(True))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

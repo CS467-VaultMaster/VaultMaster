@@ -24,7 +24,7 @@ def _get_aws_token(PG_HOST) -> str:
 
     return token    
 
-def get_db_url() -> str:
+def get_db_url(is_alembic=False) -> str:
     # Conceal secrets in .env file
     POSTGRES_USER = os.environ["POSTGRES_USER"]
     POSTGRES_DB = os.environ.get("POSTGRES_DB", POSTGRES_USER)
@@ -32,6 +32,9 @@ def get_db_url() -> str:
     POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
     # Pulls AWS auth token if run in cloud; otherwise, pulls from local env
     POSTGRES_PASSWORD = get_db_auth()
+    
+    if is_alembic:
+        POSTGRES_PASSWORD = POSTGRES_PASSWORD.replace('%', '%%')
 
     DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 
