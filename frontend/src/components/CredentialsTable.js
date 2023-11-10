@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import axios from 'axios'
 
-export default function CredentialsTable({ credentials, onEditComplete, onDelete }) {
+export default function CredentialsTable({ credentials, onEditComplete, onDelete, fetchCredentials }) {
   const [editingId, setEditingId] = useState(null)
   const [editForm, setEditForm] = useState({
     nickname: "",
@@ -37,6 +37,7 @@ export default function CredentialsTable({ credentials, onEditComplete, onDelete
       })
       // onEditComplete(id, editedCredential)
       setEditingId(null)  // Exit editing mode
+      fetchCredentials()
     } catch (error) {
       console.error('Error updating credential:', error)
     }

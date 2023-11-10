@@ -149,6 +149,7 @@ function VaultDashboard() {
             // onEdit={handleEditCredential}
             onEditComplete={handleEditComplete}
             onDelete={handleDeleteCredential}
+            fetchCredentials={fetchCredentials}
           />
         </div>
       )}
