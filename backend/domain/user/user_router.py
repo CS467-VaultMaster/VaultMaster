@@ -14,10 +14,17 @@ from domain.user.user_crud import (
     get_user_by_id,
     update_login_attempts,
 )
-from domain.user.user_schema import UserCreate, UserUpdate, UserResponse, Token
+from domain.user.user_schema import (
+    UserCreate,
+    UserUpdate,
+    UserResponse,
+    Token,
+    UserResponseRegistration,
+)
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from models import User
+import pyotp
 
 router = APIRouter(prefix="/vaultmaster/user")
 
@@ -53,11 +60,11 @@ def get_current_user(
         return user
 
 
-@router.post("/register", response_model=UserResponse)
+@router.post("/register", response_model=UserResponseRegistration)
 def register(
     user_create: UserCreate,
     db: Session = Depends(get_db),
-) -> User:
+) -> UserResponseRegistration:
     """
     User registration endpoint.
     Returns the new user info.
@@ -68,7 +75,22 @@ def register(
             status_code=status.HTTP_409_CONFLICT,
             detail="This user already exists.",
         )
-    return create_user(db=db, user_create=user_create)
+    new_user = create_user(db=db, user_create=user_create)
+
+    otp_uri = pyotp.totp.TOTP(new_user.otp_secret).provisioning_uri(f"{new_user.id}")
+
+    return UserResponseRegistration(
+        id=new_user.id,
+        username=new_user.username,
+        email=new_user.email,
+        first_name=new_user.first_name,
+        last_name=new_user.last_name,
+        created=new_user.created,
+        modified=new_user.modified,
+        last_login_attempt=new_user.last_login_attempt,
+        login_attempts=new_user.login_attempts,
+        otp_uri=otp_uri,
+    )
 
 
 @router.get("/account")

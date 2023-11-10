@@ -60,3 +60,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
     username: str
+
+
+class UserResponseRegistration(UserResponse):
+    otp_uri: str

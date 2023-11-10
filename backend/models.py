@@ -9,6 +9,7 @@ class User(Base):
     """
     User class in DB.
     """
+
     # DONE: Add first name and last name.
     # TODO: Add regex.
     __tablename__ = "site_user"
@@ -24,6 +25,7 @@ class User(Base):
     last_verified = Column(DateTime, nullable=True)
     last_login_attempt = Column(DateTime, nullable=True)
     login_attempts = Column(Integer, nullable=False)
+    otp_secret = Column(String, nullable=False)
     # TODO: Add MFA token.
 
 
