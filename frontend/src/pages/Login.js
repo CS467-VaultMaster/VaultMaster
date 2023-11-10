@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Login({ setIsAuthenticated }) {
+export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -27,9 +27,12 @@ export default function Login({ setIsAuthenticated }) {
       );
 
       if (response.status === 200) {
+        // console.log(response.data)
         sessionStorage.setItem("authToken", response.data.access_token);
-        setIsAuthenticated(true);
-        navigate("/vault");
+        setIsGoodPassword(true);
+        navigate("/mfa");
+        // setIsAuthenticated(true);
+        // navigate("/vault");
       }
     } catch (error) {
       console.log(error.response.data.detail);

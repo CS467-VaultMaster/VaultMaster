@@ -1,5 +1,5 @@
 import React from 'react'
-// import ExportPasswords from "../components/ExportPasswords"
+import ExportPasswords from "../components/ExportPasswords"
 // import GeneratePassword from "../components/GeneratePassword"
 
 export default function Tools() {
@@ -8,7 +8,7 @@ export default function Tools() {
         <h1>
             Tools
         </h1>
-        <p>Put password generator and exporter here</p>
+        <ExportPasswords/>
     </div>
   )
 }

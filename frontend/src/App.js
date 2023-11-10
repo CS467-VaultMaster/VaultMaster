@@ -6,33 +6,32 @@ import Login from "./pages/Login";
 import Tools from "./pages/Tools";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import MFAVerification from "./pages/MFAVerification";
 
 // FastAPI endpoint URL, defined so that you can run React either locally or in the container w/o issues.
 // Looked into how best to pass this - useContext()? set the value on window? - but I'll let you pick. (- Will)
 export const FASTAPI_BASE_URL =
   process.env.REACT_APP_FASTAPI_URL || "http://127.0.0.1:8000";
 
-function PrivateRoute({ children, isAuthenticated }) {
+function PrivateRoute({ children, isAuthenticated, isGoodPassword }) {
   const navigate = useNavigate();
-  // const isAuthenticated = true; // Just for now
-
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isGoodPassword) {
       navigate("/login");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isGoodPassword, navigate]); // Rerun this function when any of these things change (dependency array)
 
-  return isAuthenticated ? children : null;
+  return isAuthenticated || isGoodPassword ? children : null;
 }
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Default to not authenticated
+  const [isGoodPassword, setIsGoodPassword] = useState(false); // Intermediate authorization to trigger MFA page
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = sessionStorage.getItem("authToken");
     if (token) {
-      console.log(token);
       setIsAuthenticated(true);
     }
   }, []);
@@ -55,7 +54,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route
             path="/login"
-            element={<Login setIsAuthenticated={setIsAuthenticated} />}
+            element={
+              <Login
+                setIsAuthenticated={setIsAuthenticated}
+                setIsGoodPassword={setIsGoodPassword}
+              />
+            }
           />
           <Route
             path="/tools"
@@ -68,6 +72,14 @@ function App() {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 {<VaultDashboard />}
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/mfa"
+            element={
+              <PrivateRoute isGoodPassword={isGoodPassword}>
+                {<MFAVerification setIsAuthenticated={setIsAuthenticated} />}
               </PrivateRoute>
             }
           />
