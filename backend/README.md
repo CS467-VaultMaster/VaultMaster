@@ -1,5 +1,22 @@
 # VaultMaster Backend
+This repository houses the backend for VaultMaster, developed using [FastAPI](https://fastapi.tiangolo.com/) and [PostgreSQL](https://www.postgresql.org/). It facilitates user interaction with the application, including registration, login, logout, and CRUD operations on user profiles, vaults, and web credentials.
 
+## Technologies
+- [Python](https://www.python.org/)
+- [Go](https://go.dev/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [SQLAlchemy](https://www.sqlalchemy.org/)/[Alembic](https://alembic.sqlalchemy.org/en/latest/)
+- [Passlib](https://github.com/glic3rinu/passlib)
+- [python-jose](https://github.com/mpdavis/python-jose/tree/master)
+- [cryptography](https://github.com/pyca/cryptography)
+
+## Data Models
+
+## APIs
+
+## Encryption and Decryption
+<!---
 ## DB setup guide
 - Start the database container by running the following command.
 ```sh
@@ -25,3 +42,4 @@ docker compose up -d
 ```sh
 localhost:8000/docs
 ```
+--->
