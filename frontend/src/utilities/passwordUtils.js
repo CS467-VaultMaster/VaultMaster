@@ -40,3 +40,13 @@ export async function hasPasswordBeenPwned(password) {
     return false; // Error means it hasn't been Pwnd
   }
 }
+
+// Use this around the program rather than repeating it so much
+export function verifyToken() {
+  const token = sessionStorage.getItem("authToken");
+  if (!token) {
+    console.error("No authentication token found.");
+    return null;
+  }
+  return token;
+}

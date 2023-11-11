@@ -1,22 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuthToken } from "../utilities/passwordUtils";
+import axios from "axios";
 
 export default function MFAVerification({ setIsAuthenticated }) {
   const [mfaToken, setMfaToken] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    setIsAuthenticated(true);
-    //
-    // Put POST request to API here
-    //
-    navigate("/vault");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        console.error("No authentication token found.");
+        return;
+      }
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_FASTAPI_URL}/otp_verify/${mfaToken}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+        navigate("/vault");
+      } else {
+        console.error("MFA verification failed.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="mfa-page">
       <h2>MFA Confirmation</h2>
-      {/* <form onSubmit={handleMFA}>
+      <form onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="MFA-token">MFA Token</label>
           <input
@@ -27,8 +51,8 @@ export default function MFAVerification({ setIsAuthenticated }) {
             required
           />
         </div>
-      </form> */}
-      <button onClick={handleSubmit}>MFA Good</button>
+      </form>
+      <button type="submit">Verify</button>
     </div>
   );
 }
