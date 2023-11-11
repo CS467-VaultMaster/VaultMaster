@@ -41,11 +41,11 @@ function VaultDashboard() {
       );
       if (response.status === 200) {
         setIsPwdVerified(true);
-        setSuccessMessage("Verification successful. Unlocking vault...");
+        // setSuccessMessage("Verification successful. Unlocking vault...");
         fetchCredentials();
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 2000);
+        // setTimeout(() => {
+        //   setSuccessMessage("");
+        // }, 2000);
       } else {
         setErrorMessage("Incorrect password.");
       }
