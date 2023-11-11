@@ -6,12 +6,53 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 - [Go](https://go.dev/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [PostgreSQL](https://www.postgresql.org/)
-- [SQLAlchemy](https://www.sqlalchemy.org/)/[Alembic](https://alembic.sqlalchemy.org/en/latest/)
+- [SQLAlchemy](https://www.sqlalchemy.org/) and [Alembic](https://alembic.sqlalchemy.org/en/latest/)
 - [Passlib](https://github.com/glic3rinu/passlib)
 - [python-jose](https://github.com/mpdavis/python-jose/tree/master)
 - [cryptography](https://github.com/pyca/cryptography)
 
 ## Data Models
+
+#### User
+
+| **Field**           | **Type**    |
+|---------------------|-------------|
+| id (PK)             | VARCHAR     |
+| vault (FK)          | VARCHAR     |
+| username            | VARCHAR     |
+| password            | VARCHAR     |
+| email               | VARCHAR     |
+| first_name          | VARCHAR     |
+| last_name           | VARCHAR     |
+| created             | TIMESTAMPTZ |
+| modified            | TIMESTAMPTZ |
+| last_verified       | TIMESTAMPTZ |
+| last_login_attempt  | TIMESTAMPTZ |
+| login_attempts      | SMALLINT    |
+
+#### Vault
+
+| **Field**           | **Type**    |
+|---------------------|-------------|
+| id (PK)             | VARCHAR     |
+| credential (FK)     | VARCHAR     |
+| vault_name          | VARCHAR     |
+| created             | TIMESTAMPTZ |
+| modified            | TIMESTAMPTZ |
+
+#### Credential
+
+| **Field**           | **Type**    |
+|---------------------|-------------|
+| id (PK)             | VARCHAR     |
+| nickname            | VARCHAR     |
+| category            | VARCHAR     |
+| url                 | VARCHAR     |
+| password            | VARCHAR     |
+| note                | VARCHAR     |
+| created             | TIMESTAMPTZ |
+| modified            | TIMESTAMPTZ |
+| fernet_key          | TIMESTAMPTZ |
 
 ## APIs
 

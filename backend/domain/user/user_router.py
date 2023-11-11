@@ -77,7 +77,7 @@ def register(
         )
     new_user = create_user(db=db, user_create=user_create)
 
-    otp_uri = pyotp.totp.TOTP(new_user.otp_secret).provisioning_uri(f"{new_user.id}")
+    otp_uri = pyotp.totp.TOTP(new_user.otp_secret).provisioning_uri("VaultMaster")
 
     return UserResponseRegistration(
         id=new_user.id,
