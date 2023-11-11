@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function MFAVerification({ setIsAuthenticated }) {
-  const [mfaToken, setMfaToken] = useState("")
+  const [mfaToken, setMfaToken] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = () => {
@@ -16,7 +16,7 @@ export default function MFAVerification({ setIsAuthenticated }) {
   return (
     <div className="mfa-page">
       <h2>MFA Confirmation</h2>
-      <form onSubmit={handleMFA}>
+      {/* <form onSubmit={handleMFA}>
         <div className="input-group">
           <label htmlFor="MFA-token">MFA Token</label>
           <input
@@ -27,7 +27,7 @@ export default function MFAVerification({ setIsAuthenticated }) {
             required
           />
         </div>
-      </form>
+      </form> */}
       <button onClick={handleSubmit}>MFA Good</button>
     </div>
   );

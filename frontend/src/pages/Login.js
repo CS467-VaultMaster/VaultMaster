@@ -8,6 +8,10 @@ export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -73,7 +77,7 @@ export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
       </form>
 
       <div className="login-link">
-        <Link to="/register">Register</Link>
+        <button onClick={handleRegister}>Register</button>
       </div>
     </div>
   );

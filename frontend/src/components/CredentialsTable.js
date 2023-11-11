@@ -1,16 +1,21 @@
-import React, {useState} from "react";
-import axios from 'axios'
+import React, { useState } from "react";
+import axios from "axios";
 
-export default function CredentialsTable({ credentials, onEditComplete, onDelete, fetchCredentials }) {
-  const [editingId, setEditingId] = useState(null)
+export default function CredentialsTable({
+  credentials,
+  onEditComplete,
+  onDelete,
+  fetchCredentials,
+}) {
+  const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({
     nickname: "",
     category: "",
     url: "",
     password: "",
-    note: ""
+    note: "",
   });
-  
+
   const handleEdit = (credential) => {
     setEditingId(credential.id);
     setEditForm({
@@ -18,35 +23,35 @@ export default function CredentialsTable({ credentials, onEditComplete, onDelete
       category: credential.category,
       url: credential.url,
       password: credential.password,
-      note: credential.note
+      note: credential.note,
     });
   };
 
   const handleSave = async (id) => {
-    console.log(
-      editForm
-    )
+    console.log(editForm);
     try {
-      const token = sessionStorage.getItem('authToken')
-      await axios.put(`${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`, 
-      editForm, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const token = sessionStorage.getItem("authToken");
+      await axios.put(
+        `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`,
+        editForm,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
+      );
       // onEditComplete(id, editedCredential)
-      setEditingId(null)  // Exit editing mode
-      fetchCredentials()
+      setEditingId(null); // Exit editing mode
+      fetchCredentials();
     } catch (error) {
-      console.error('Error updating credential:', error)
+      console.error("Error updating credential:", error);
     }
-  }
+  };
 
   const handleChange = (e, field) => {
     setEditForm({
       ...editForm,
-      [field]: e.target.value
+      [field]: e.target.value,
     });
   };
 
@@ -66,45 +71,75 @@ export default function CredentialsTable({ credentials, onEditComplete, onDelete
             </tr>
           </thead>
           <tbody>
-          {credentials.map((credential) => {
-            const isEditing = editingId === credential.id;
-            return (
-              <tr key={credential.id}>
-                {/* Editable fields */}
-                {isEditing ? (
-                  <>
-                    <td><input type="text" value={editForm.nickname} onChange={(e) => handleChange(e, 'nickname')} /></td>
-                    <td><input type="text" value={editForm.url} onChange={(e) => handleChange(e, 'url')} /></td>
-                    <td>
-                      <input type="text" value={editForm.password} onChange={(e) => handleChange(e, 'password')} />
-                    </td>
-                    <td><input type="text" value={editForm.category} onChange={(e) => handleChange(e, 'category')} /></td>
-                    <td><input type="text" value={editForm.note} onChange={(e) => handleChange(e, 'note')} /></td>
-                  </>
-                ) : (
-                  // Non-editable display
-                  <>
-                    <td>{credential.nickname}</td>
-                    <td>{credential.url}</td>
-                    <td>{credential.password}</td>
-                    <td>{credential.category}</td>
-                    <td>{credential.note}</td>
-                  </>
-                )}
-
-                {/* Action buttons */}
-                <td>
+            {credentials.map((credential) => {
+              const isEditing = editingId === credential.id;
+              return (
+                <tr key={credential.id}>
+                  {/* Editable fields */}
                   {isEditing ? (
-                    <button onClick={() => handleSave(credential.id)}>Save</button>
+                    <>
+                      <td>
+                        <input
+                          type="text"
+                          value={editForm.nickname}
+                          onChange={(e) => handleChange(e, "nickname")}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={editForm.url}
+                          onChange={(e) => handleChange(e, "url")}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={editForm.password}
+                          onChange={(e) => handleChange(e, "password")}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={editForm.category}
+                          onChange={(e) => handleChange(e, "category")}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={editForm.note}
+                          onChange={(e) => handleChange(e, "note")}
+                        />
+                      </td>
+                    </>
                   ) : (
-                    <button onClick={() => handleEdit(credential)}>Edit</button>
+                    // Non-editable display
+                    <>
+                      <td>{credential.nickname}</td>
+                      <td>{credential.url}</td>
+                      <td className={credential.isPwned ? "breached-password" : ""}>
+                        {credential.password}
+                      </td>
+                      <td>{credential.category}</td>
+                      <td>{credential.note}</td>
+                    </>
                   )}
-                  <button onClick={() => onDelete(credential.id)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
+
+                  {/* Action buttons */}
+                  <td>
+                    {isEditing ? (
+                      <button onClick={() => handleSave(credential.id)}>Save</button>
+                    ) : (
+                      <button onClick={() => handleEdit(credential)}>Edit</button>
+                    )}
+                    <button onClick={() => onDelete(credential.id)}>Delete</button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       ) : (
         <p>No credentials found.</p>

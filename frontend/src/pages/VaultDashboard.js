@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddCredential from "../components/AddCredential";
 import CredentialsTable from "../components/CredentialsTable";
+import { hasPasswordBeenPwned } from "../utilities/passwordUtils";
 
 function VaultDashboard() {
   const [credentials, setCredentials] = useState([]);
@@ -10,6 +11,7 @@ function VaultDashboard() {
   const [isPwdVerified, setIsPwdVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [hasPwnedPassword, setHasPwnedPassword] = useState(false);
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -69,32 +71,26 @@ function VaultDashboard() {
           },
         }
       );
-      setCredentials(response.data);
+
+      // Check passwords on fetch() to see if they've been Pwned
+      const checkPasswordPwnedStatus = await Promise.all(
+        response.data.map(async (credential) => {
+          const isPwned = await hasPasswordBeenPwned(credential.password);
+          console.log(credential);
+          return { ...credential, isPwned }; // Add breach status to each credential
+        })
+      );
+
+      setCredentials(checkPasswordPwnedStatus);
+      setHasPwnedPassword(checkPasswordPwnedStatus.some((cred) => cred.isPwned));
     } catch (error) {
       console.error("Error fetching credentials:", error);
     }
   };
 
-  // const handleAddCredential = (newCredential) => {
-  //   setCredentials((prevCredentials) => [...prevCredentials, newCredential]);
-  // };
-
   const handleAddCredential = () => {
     fetchCredentials();
-  }
-
-  // const handleEditCredential = (index) => {
-  //   // logic to handle editing a credential
-  //   console.log("Edit credential at index:", index);
-  // };
-
-  // const handleEditComplete = (id, updatedCredential) => {
-  //   setCredentials((prevCredentials) =>
-  //     prevCredentials.map((cred) =>
-  //       cred.id === id ? { ...cred, updatedCredential } : cred
-  //     )
-  //   );
-  // };
+  };
 
   const handleEditComplete = () => {
     // fetchCredentials();
@@ -118,7 +114,7 @@ function VaultDashboard() {
       );
 
       if (response.status === 204) {
-        fetchCredentials()
+        fetchCredentials();
         console.log("Deleted credential with ID:", id);
       }
     } catch (error) {
@@ -141,12 +137,15 @@ function VaultDashboard() {
       ) : (
         <div>
           {successMessage && <p>{successMessage}</p>}
-          {/* {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} */}
+          {hasPwnedPassword && (
+            <p className="warning-message">
+              Warning: One or more of your passwords may have been exposed in a data
+              breach.
+            </p>
+          )}
           <AddCredential onAdd={handleAddCredential} />
-          {/* <AddCredential/> */}
           <CredentialsTable
             credentials={credentials}
-            // onEdit={handleEditCredential}
             onEditComplete={handleEditComplete}
             onDelete={handleDeleteCredential}
             fetchCredentials={fetchCredentials}
