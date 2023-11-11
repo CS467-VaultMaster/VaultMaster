@@ -4,8 +4,11 @@ services:
   backend:
     build:
       context: ./backend
+<<<<<<< HEAD
     ports:
       - "8000:8000"
+=======
+>>>>>>> prod-server
     env_file:
       - .env.prod
     command: uvicorn main:app --host 0.0.0.0 --port 8000
@@ -14,6 +17,11 @@ services:
     build:
       dockerfile: prod-server/Dockerfile
       context: ./
+<<<<<<< HEAD
+=======
+      args:
+        - REACT_APP_FASTAPI_URL=
+>>>>>>> prod-server
     ports:
       - "80:80"
       - "443:443"

@@ -11,7 +11,7 @@ import MFAVerification from "./pages/MFAVerification";
 // FastAPI endpoint URL, defined so that you can run React either locally or in the container w/o issues.
 // Looked into how best to pass this - useContext()? set the value on window? - but I'll let you pick. (- Will)
 export const FASTAPI_BASE_URL =
-  process.env.REACT_APP_FASTAPI_URL || "http://127.0.0.1:8000";
+  process.env.REACT_APP_FASTAPI_URL;
 
 function PrivateRoute({ children, isAuthenticated, isGoodPassword }) {
   const navigate = useNavigate();

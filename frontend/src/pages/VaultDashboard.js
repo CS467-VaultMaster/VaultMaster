@@ -137,15 +137,24 @@ function VaultDashboard() {
       ) : (
         <div>
           {successMessage && <p>{successMessage}</p>}
+<<<<<<< HEAD
           {hasPwnedPassword && (
             <p className="warning-message">
               Warning: One or more of your passwords may have been exposed in a data
               breach.
             </p>
           )}
+=======
+          {/* {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} */}
+>>>>>>> prod-server
           <AddCredential onAdd={handleAddCredential} />
+          {/* <AddCredential/> */}
           <CredentialsTable
             credentials={credentials}
+<<<<<<< HEAD
+=======
+            // onEdit={handleEditCredential}
+>>>>>>> prod-server
             onEditComplete={handleEditComplete}
             onDelete={handleDeleteCredential}
             fetchCredentials={fetchCredentials}

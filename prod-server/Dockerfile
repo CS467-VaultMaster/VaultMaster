@@ -11,6 +11,10 @@ RUN npm install
 
 COPY frontend /frontend/
 
+ARG REACT_APP_FASTAPI_URL
+
+ENV REACT_APP_FASTAPI_URL ${REACT_APP_FASTAPI_URL}
+
 RUN npm run build
 
 # Import staticfiles into nginx server and serve
@@ -18,7 +22,7 @@ FROM nginx:latest as prod-stage
 
 COPY --from=npm-build-stage /frontend/build /usr/share/nginx/html
 
-# TODO: copy config files over from . (/nginx)
+COPY prod-server/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80 443
 
