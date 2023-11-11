@@ -167,13 +167,18 @@ def login_for_access_token(
     }
 
 
-@router.get("/otp_verify/{code}")
+@router.get("/otp_verify/{code}", status_code=200)
 def otp_verify(code: str, user: User = Depends(get_current_user)) -> bool:
     otp_key = user.otp_secret
     value_to_verity = pyotp.TOTP(otp_key)
     if value_to_verity.verify(code):
         return True
-    return False
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect OTP code.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 
 def check_login_attempts(db: Session, current_user: User):
