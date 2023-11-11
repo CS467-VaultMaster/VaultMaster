@@ -167,6 +167,15 @@ def login_for_access_token(
     }
 
 
+@router.get("/otp_verify/{code}")
+def otp_verify(code: str, user: User = Depends(get_current_user)) -> bool:
+    otp_key = user.otp_secret
+    value_to_verity = pyotp.TOTP(otp_key)
+    if value_to_verity.verify(code):
+        return True
+    return False
+
+
 def check_login_attempts(db: Session, current_user: User):
     # If the user has more than 3 login attempts.
     if current_user.login_attempts == 3:
