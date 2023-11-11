@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GeneratePassword from "../components/GeneratePassword";
 import { passwordComplexity, hasPasswordBeenPwned } from "../utilities/passwordUtils";
+import { QRCodeSVG } from "qrcode.react";
 import axios from "axios";
 
 export default function Register() {
@@ -15,6 +16,7 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [otpUri, setOtpUri] = useState("");
 
   const isValidEmail = (email) => {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -68,10 +70,10 @@ export default function Register() {
 
       if (response.status === 200) {
         console.log(response.data);
-        setSuccessMessage("Registration successful! Redirecting to login...");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
+        setOtpUri(response.data.otp_uri);
+        setSuccessMessage(
+          "Registration successful! Please scan the QR code with your MFA app. This will be the only time this QR code is shown."
+        );
       } else {
         setGeneralError(
           response.data.message || "An error occurred during registration."
@@ -92,86 +94,100 @@ export default function Register() {
     }
   };
 
+  const handleConfirmation = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="register page">
       <h2>Register</h2>
       {successMessage && <p className="success">{successMessage}</p>}
       {generalError && <p className="error">{generalError}</p>}
-      <form onSubmit={handleRegistration}>
-        <div className="input-group">
-          <label htmlFor="firstName">First Name</label>
-          <input
-            type="text"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </div>
+      {successMessage && !otpUri && <p className="success">{successMessage}</p>}
+      {!otpUri && (
+        <form onSubmit={handleRegistration}>
+          <div className="input-group">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            type="text"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="password1">Password</label>
-          <input
-            type="password"
-            id="password1"
-            value={password1}
-            onChange={(e) => setPassword1(e.target.value)}
-            required
-          />
-          <GeneratePassword />
-        </div>
+          <div className="input-group">
+            <label htmlFor="password1">Password</label>
+            <input
+              type="password"
+              id="password1"
+              value={password1}
+              onChange={(e) => setPassword1(e.target.value)}
+              required
+            />
+            <GeneratePassword />
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="password2">Confirm Password</label>
-          <input
-            type="password"
-            id="password2"
-            value={password2}
-            onChange={(e) => setPassword2(e.target.value)}
-            required
-          />
-          {passwordError && <p className="error">{passwordError}</p>}
-        </div>
+          <div className="input-group">
+            <label htmlFor="password2">Confirm Password</label>
+            <input
+              type="password"
+              id="password2"
+              value={password2}
+              onChange={(e) => setPassword2(e.target.value)}
+              required
+            />
+            {passwordError && <p className="error">{passwordError}</p>}
+          </div>
 
-        <div className="input-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit">Register</button>
+          <button type="submit">Register</button>
 
-        <div className="register-link">
-          <Link to="/login">Login</Link>
+          <div className="register-link">
+            <Link to="/login">Login</Link>
+          </div>
+        </form>
+      )}
+      {otpUri && (
+        <div>
+          <QRCodeSVG value={otpUri} />
+          <p>Scan this QR code with your MFA app and then click 'OK'</p>
+          <button onClick={handleConfirmation}>OK</button>
         </div>
-      </form>
+      )}
     </div>
   );
 }
