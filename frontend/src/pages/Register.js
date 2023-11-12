@@ -94,7 +94,8 @@ export default function Register() {
     }
   };
 
-  const handleConfirmation = () => {
+  const handleQRConfirmation = () => {
+    window.alert("Please ensure you have scanned the QR code before proceeding. It will not be shown again.")
     navigate("/login");
   };
 
@@ -185,7 +186,7 @@ export default function Register() {
         <div>
           <QRCodeSVG value={otpUri} />
           <p>Scan this QR code with your MFA app and then click 'OK'</p>
-          <button onClick={handleConfirmation}>OK</button>
+          <button onClick={handleQRConfirmation}>OK</button>
         </div>
       )}
     </div>

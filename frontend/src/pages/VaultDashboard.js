@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import Navigation from "../components/Navigation";
 import axios from "axios";
 import AddCredential from "../components/AddCredential";
@@ -10,7 +10,7 @@ function VaultDashboard() {
   const [password, setPassword] = useState("");
   const [isPwdVerified, setIsPwdVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  // const [successMessage, setSuccessMessage] = useState("");
   const [hasPwnedPassword, setHasPwnedPassword] = useState(false);
 
   const handlePasswordChange = (e) => {
@@ -136,7 +136,7 @@ function VaultDashboard() {
         </div>
       ) : (
         <div>
-          {successMessage && <p>{successMessage}</p>}
+          {/* {successMessage && <p>{successMessage}</p>} */}
           {hasPwnedPassword && (
             <p className="warning-message">
               Warning: One or more of your passwords may have been exposed in a data

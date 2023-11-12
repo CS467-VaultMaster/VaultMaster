@@ -19,7 +19,7 @@ export default function GeneratePassword() {
       </button>
       {generatedPassword && (
         <div className="generated-password">
-          Generated Password: {generatedPassword}
+          {generatedPassword}
         </div>
       )}
     </div>
