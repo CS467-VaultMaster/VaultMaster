@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    env_file:
+      - .env.prod
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  prod-server:
+    build:
+      dockerfile: prod-server/Dockerfile
+      context: ./
+      args:
+        - REACT_APP_FASTAPI_URL=
+    ports:
+      - "80:80"
+      - "443:443"
