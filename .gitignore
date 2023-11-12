@@ -16,3 +16,7 @@ frontend/build
 
 # VSC stuff
 .vscode/
+
+# Archive files
+*.tar
+*.sql
