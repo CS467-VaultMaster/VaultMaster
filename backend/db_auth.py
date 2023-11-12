@@ -39,3 +39,6 @@ def get_db_url(is_alembic=False) -> str:
     DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 
     return DATABASE_URL
+
+if __name__ == "__main__":
+    print(get_db_auth())

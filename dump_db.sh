@@ -41,7 +41,7 @@ if [ -z "$container_id" ]; then
 fi
 
 # Execute pg_dump command to create dumpfile
-docker exec -t "$container_id" pg_dump -U "$POSTGRES_USER" -T public.alembic_version --inserts vaultmaster > "$filename"
+docker exec -t "$container_id" pg_dump -U "$POSTGRES_USER" -T public.alembic_version --inserts --clean --if-exists vaultmaster > "$filename"
 
 echo "Dumpfile created: $filename"
 
