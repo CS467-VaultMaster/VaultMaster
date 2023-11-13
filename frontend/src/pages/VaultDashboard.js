@@ -13,11 +13,8 @@ function VaultDashboard() {
   // const [successMessage, setSuccessMessage] = useState("");
   const [hasPwnedPassword, setHasPwnedPassword] = useState(false);
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handlePasswordSubmit = async () => {
+  const handlePasswordSubmit = async (event) => {
+    event.preventDefault()
     const token = sessionStorage.getItem("authToken");
 
     if (!token) {
@@ -126,21 +123,21 @@ function VaultDashboard() {
     <div className="vault-dashboard">
       <h2>Vault Dashboard</h2>
       {!isPwdVerified ? (
-        <div>
+        <form onSubmit={handlePasswordSubmit}>
           <label>
             Password:
-            <input type="password" value={password} onChange={handlePasswordChange} />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </label>
-          <button onClick={handlePasswordSubmit}>Verify</button>
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        </div>
+          <button type="submit">Verify</button>
+          {errorMessage && <p style={{ color: "darkred" }}>{errorMessage}</p>}
+        </form>
       ) : (
         <div>
           {/* {successMessage && <p>{successMessage}</p>} */}
           {hasPwnedPassword && (
             <p className="warning-message">
               Warning: One or more of your passwords may have been exposed in a data
-              breach.
+              breach. It is recommended to change them.
             </p>
           )}
           <AddCredential onAdd={handleAddCredential} />

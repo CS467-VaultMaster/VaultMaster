@@ -24,6 +24,7 @@ export default function Register() {
   };
 
   const handleRegistration = async (e) => {
+    setGeneralError("");
     setPasswordError("");
     e.preventDefault();
 
@@ -54,6 +55,7 @@ export default function Register() {
     }
 
     setPasswordError(""); // Reset password error and proceed with registration
+    setGeneralError("");
 
     try {
       const response = await axios.post(
@@ -71,6 +73,8 @@ export default function Register() {
       if (response.status === 200) {
         console.log(response.data);
         setOtpUri(response.data.otp_uri);
+        setGeneralError("");
+        setPasswordError("");
         setSuccessMessage(
           "Registration successful! Please scan the QR code with your MFA app. This will be the only time this QR code is shown."
         );
@@ -95,7 +99,9 @@ export default function Register() {
   };
 
   const handleQRConfirmation = () => {
-    window.alert("Please ensure you have scanned the QR code before proceeding. It will not be shown again.")
+    window.alert(
+      "Please ensure you have scanned the QR code before proceeding. It will not be shown again."
+    );
     navigate("/login");
   };
 

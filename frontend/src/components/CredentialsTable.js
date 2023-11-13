@@ -58,20 +58,20 @@ export default function CredentialsTable({
   return (
     <div className="table-container">
       <h3>Credentials</h3>
-      {credentials.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nickname</th>
-              <th>URL</th>
-              <th>Password</th>
-              <th>Category</th>
-              <th>Note</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {credentials.map((credential) => {
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Nickname</th>
+            <th>URL</th>
+            <th>Password</th>
+            <th>Category</th>
+            <th>Note</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {credentials.length > 0 ? (
+            credentials.map((credential) => {
               const isEditing = editingId === credential.id;
               return (
                 <tr key={credential.id}>
@@ -138,12 +138,14 @@ export default function CredentialsTable({
                   </td>
                 </tr>
               );
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <p>No credentials found.</p>
-      )}
+            })
+          ) : (
+            <tr>
+              <td>No credentials found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }
