@@ -6,17 +6,17 @@ from domain.vault import vault_router
 from domain.credential import credential_router
 
 ORIGINS = [
-	"http://localhost:3000",
+    "http://localhost:3000",
 ]
 
 app = FastAPI()
 
 app.add_middleware(
-	CORSMiddleware,
-	allow_origins=ORIGINS,
-	allow_credentials=True,
-	allow_methods=["*"],
-	allow_headers=["*"],
+    CORSMiddleware,
+    allow_origins=ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(user_router.router, tags=["User"])

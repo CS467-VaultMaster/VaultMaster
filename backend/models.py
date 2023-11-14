@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, String, DateTime, Integer, Text
+from sqlalchemy import Column, ForeignKey, String, DateTime, Integer, Text, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -25,8 +25,9 @@ class User(Base):
     last_verified = Column(DateTime, nullable=True)
     last_login_attempt = Column(DateTime, nullable=True)
     login_attempts = Column(Integer, nullable=False)
+    is_admin = Column(Boolean, nullable=False)
     otp_secret = Column(String, nullable=False)
-    # TODO: Add MFA token.
+    # DONE: Add MFA token.
 
 
 class Vault(Base):
@@ -61,3 +62,13 @@ class Credential(Base):
     fernet_key = Column(String, nullable=False)
     vault_id = Column(String, ForeignKey("vault.id"))
     vault = relationship("Vault", backref="vault")
+
+
+class Admin(Base):
+    """
+    Admin class in DB.
+    """
+    __tablename__ = "admin"
+    id = Column(String, primary_key=True)
+    user_id = Column(String, nullable=False)
+    last_accessed = Column(DateTime, nullable=False)

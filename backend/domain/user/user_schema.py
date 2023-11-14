@@ -9,6 +9,7 @@ class UserCreate(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
+    admin_key: bool = False
 
     @validator("username", "password1", "password2", "email")
     def not_empty(cls, v):
