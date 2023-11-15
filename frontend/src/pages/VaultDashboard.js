@@ -1,26 +1,24 @@
 import React, { useState } from "react";
-// import Navigation from "../components/Navigation";
 import axios from "axios";
 import AddCredential from "../components/AddCredential";
 import CredentialsTable from "../components/CredentialsTable";
-import { hasPasswordBeenPwned } from "../utilities/passwordUtils";
+import { hasPasswordBeenPwned, verifyToken } from "../utilities/passwordUtils";
 
 function VaultDashboard() {
   const [credentials, setCredentials] = useState([]);
   const [password, setPassword] = useState("");
   const [isPwdVerified, setIsPwdVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  // const [successMessage, setSuccessMessage] = useState("");
   const [hasPwnedPassword, setHasPwnedPassword] = useState(false);
 
   const handlePasswordSubmit = async (event) => {
-    event.preventDefault()
-    const token = sessionStorage.getItem("authToken");
+    event.preventDefault();
 
+    const token = verifyToken();
     if (!token) {
-      console.error("Token not found!");
       return;
     }
+
     const headers = {
       Authorization: `Bearer ${token}`,
     };
@@ -28,7 +26,6 @@ function VaultDashboard() {
     try {
       setErrorMessage("");
       console.log(`Password: ${password}`);
-      // Need to provide token
       const response = await axios.put(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/vault/open`,
         {
@@ -37,12 +34,9 @@ function VaultDashboard() {
         { headers }
       );
       if (response.status === 200) {
-        setIsPwdVerified(true);
-        // setSuccessMessage("Verification successful. Unlocking vault...");
+        setIsPwdVerified(true); // Save this in session storage to persist across pages
+        sessionStorage.setItem("isPwdVerified", "true");
         fetchCredentials();
-        // setTimeout(() => {
-        //   setSuccessMessage("");
-        // }, 2000);
       } else {
         setErrorMessage("Incorrect password.");
       }
@@ -54,9 +48,8 @@ function VaultDashboard() {
 
   const fetchCredentials = async () => {
     try {
-      const token = sessionStorage.getItem("authToken");
+      const token = verifyToken();
       if (!token) {
-        console.error("No authentication token found.");
         return;
       }
 
@@ -95,9 +88,8 @@ function VaultDashboard() {
 
   const handleDeleteCredential = async (id) => {
     try {
-      const token = sessionStorage.getItem("authToken");
+      const token = verifyToken();
       if (!token) {
-        console.error("No authentication token found.");
         return;
       }
 
@@ -122,11 +114,15 @@ function VaultDashboard() {
   return (
     <div className="vault-dashboard">
       <h2>Vault Dashboard</h2>
-      {!isPwdVerified ? (
+      {!sessionStorage.getItem("isPwdVerified") ? (
         <form onSubmit={handlePasswordSubmit}>
           <label>
             Password:
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
           <button type="submit">Verify</button>
           {errorMessage && <p style={{ color: "darkred" }}>{errorMessage}</p>}

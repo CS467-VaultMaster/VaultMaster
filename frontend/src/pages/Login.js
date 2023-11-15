@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import GeneratePassword from "../components/GeneratePassword";
 
 export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
   const [username, setUsername] = useState("");
@@ -79,6 +80,7 @@ export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
       <div className="login-link">
         <button onClick={handleRegister}>Register</button>
       </div>
+      <GeneratePassword/>
     </div>
   );
 }

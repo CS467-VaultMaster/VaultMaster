@@ -15,7 +15,6 @@ export default function MFAVerification({ setIsAuthenticated }) {
     try {
       const token = verifyToken();
       if (!token) {
-        console.error("No authentication token found.");
         return;
       }
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { verifyToken } from "../utilities/passwordUtils";
 import axios from "axios";
 
 export default function ExportPasswords() {
@@ -10,9 +11,8 @@ export default function ExportPasswords() {
 
   const fetchCredentials = async () => {
     try {
-      const token = sessionStorage.getItem("authToken");
+      const token = verifyToken();
       if (!token) {
-        console.error("No authentication token found.");
         return;
       }
 

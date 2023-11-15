@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { verifyToken } from "../utilities/passwordUtils";
 
 export default function CredentialsTable({
   credentials,
@@ -30,7 +31,11 @@ export default function CredentialsTable({
   const handleSave = async (id) => {
     console.log(editForm);
     try {
-      const token = sessionStorage.getItem("authToken");
+      const token = verifyToken();
+      if (!token) {
+        return;
+      }
+
       await axios.put(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/credential/${id}`,
         editForm,
