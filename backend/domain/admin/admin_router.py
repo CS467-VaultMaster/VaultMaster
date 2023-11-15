@@ -22,6 +22,7 @@ def get_admin(
 
 @router.get("/user_account/{user_id}")
 def user_account_get_admin(
+    user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -30,6 +31,7 @@ def user_account_get_admin(
 
 @router.put("/user_account/{user_id}")
 def user_account_update_admin(
+    user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -38,6 +40,7 @@ def user_account_update_admin(
 
 @router.delete("/user_account/{user_id}")
 def user_account_delete_admin(
+    user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -46,6 +49,7 @@ def user_account_delete_admin(
 
 @router.get("/user_vault/{user_id}")
 def user_vault_get_admin(
+    user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -54,6 +58,46 @@ def user_vault_get_admin(
 
 @router.put("/user_vault/{user_id}")
 def user_vault_update_admin(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    pass
+
+
+@router.get("/user_credential/{user_id}/list")
+def user_credential_get_admin_all(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    pass
+
+
+@router.get("/user_credential/{user_id}/{credential_id}")
+def user_credential_get_admin(
+    user_id: str,
+    credential_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    pass
+
+
+@router.put("/user_credential/{user_id}/{credential_id}")
+def user_credential_update_admin(
+    user_id: str,
+    credential_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    pass
+
+
+@router.delete("/user_credential/{user_id}/{credential_id}")
+def user_credential_delete_admin(
+    user_id: str,
+    credential_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
