@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from domain.user import user_router
 from domain.vault import vault_router
 from domain.credential import credential_router
+from domain.admin import admin_router
 
 ORIGINS = [
     "http://localhost:3000",
@@ -22,3 +23,4 @@ app.add_middleware(
 app.include_router(user_router.router, tags=["User"])
 app.include_router(vault_router.router, tags=["Vault"])
 app.include_router(credential_router.router, tags=["Credential"])
+app.include_router(admin_router.router, tags=["Admin"])

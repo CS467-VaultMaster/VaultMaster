@@ -71,4 +71,5 @@ class Admin(Base):
     __tablename__ = "admin"
     id = Column(String, primary_key=True)
     user_id = Column(String, nullable=False)
+    username = Column(String, nullable=False)
     last_accessed = Column(DateTime, nullable=False)
