@@ -3,6 +3,9 @@
 # This script loads a dumpfile into the production database.
 # Can only be run within the host machine (on AWS). 
 
+# Abort if any command within fails
+set -e
+
 # Check for .env.prod file and exit with error if not found
 if [ ! -f .env.prod ]; then
     echo "ERROR: no .env.prod file found. Exiting."
@@ -28,6 +31,7 @@ container_id=$(docker ps | grep "vaultmaster-backend" | awk '{print $1}')
 if [ -z "$container_id" ]; then
     echo "ERROR: backend container not running."
     echo "Exiting..."
+    exit 1
 fi
 
 # Obtain current DB credentials
