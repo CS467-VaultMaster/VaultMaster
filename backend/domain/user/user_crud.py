@@ -102,6 +102,11 @@ def get_existing_user(db: Session, user_create: UserCreate) -> User | None:
         .first()
     )
 
+def get_all_users(db: Session):
+    """
+    Fetches all users in the database.
+    """
+    return db.query(User).all()
 
 def get_user_by_username(db: Session, username: str) -> User | None:
     """

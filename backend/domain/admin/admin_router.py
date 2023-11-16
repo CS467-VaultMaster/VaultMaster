@@ -4,20 +4,35 @@ from sqlalchemy.orm import Session
 from starlette import status
 from datetime import datetime
 from database import get_db
-
+from domain.admin.admin_crud import check_user_status
 from domain.user.user_router import get_current_user
+from domain.user.user_crud import (
+    get_user_by_id,
+    get_all_users,
+)
 from models import Admin, User
+from domain.user.user_schema import UserResponse
 
 
 router = APIRouter(prefix="/vaultmaster/admin")
 
 
 @router.get("/admin_list")
-def get_admin(
+def admin_get_all(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    check_user_status(db, current_user)
     return db.query(Admin).all()
+
+
+@router.get("/user_account/all")
+def user_account_get_all(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    check_user_status(db, current_user)
+    return get_all_users(db)
 
 
 @router.get("/user_account/{user_id}")
@@ -25,8 +40,9 @@ def user_account_get_admin(
     user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
-    pass
+) -> UserResponse:
+    check_user_status(db, current_user)
+    return get_user_by_id(db, user_id)
 
 
 @router.put("/user_account/{user_id}")
