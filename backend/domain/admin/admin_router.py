@@ -9,9 +9,11 @@ from domain.user.user_router import get_current_user
 from domain.user.user_crud import (
     get_user_by_id,
     get_all_users,
+    update_user,
+    remove_user,
 )
 from models import Admin, User
-from domain.user.user_schema import UserResponse
+from domain.user.user_schema import UserResponse, UserUpdate
 
 
 router = APIRouter(prefix="/vaultmaster/admin")
@@ -40,18 +42,21 @@ def user_account_get_admin(
     user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> UserResponse:
+) -> UserResponse | None:
     check_user_status(db, current_user)
     return get_user_by_id(db, user_id)
 
 
 @router.put("/user_account/{user_id}")
 def user_account_update_admin(
+    user_update: UserUpdate,
     user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    pass
+    check_user_status(db, current_user)
+    user = get_user_by_id(db, user_id)
+    return update_user(db, user_update, user)
 
 
 @router.delete("/user_account/{user_id}")
@@ -60,7 +65,9 @@ def user_account_delete_admin(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    pass
+    check_user_status(db, current_user)
+    user = get_user_by_id(db, user_id)
+    return remove_user(db, user)
 
 
 @router.get("/user_vault/{user_id}")
