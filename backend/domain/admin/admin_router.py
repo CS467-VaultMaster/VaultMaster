@@ -132,10 +132,11 @@ def user_credential_update_admin(
     credential_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> CredentialResponse:
+):
     check_user_status(db, current_user)
     user = get_user_by_id(db, user_id)
-    return update_credential(db, credential_id, credential_update, user)
+    update_credential(db, credential_id, credential_update, user)
+    return get_credentials(db, user)
 
 
 @router.delete("/user_credential/{user_id}/{credential_id}")
