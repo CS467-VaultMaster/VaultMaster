@@ -27,16 +27,6 @@ def create_vault(db: Session, user: User, vault_create: VaultCreate):
     db.commit()
 
 
-def get_vaults(db: Session):
-    """
-    TODO: REMOVE THIS - TEST ONLY.
-    """
-    vaults = db.query(Vault).all()
-    for vault in vaults:
-        print(vault.user)
-        print(vault.user_id)
-
-
 def get_vault_by_user_id(db: Session, user_id: str) -> Vault | None:
     """
     Returns a vault that is assigned to the given user.

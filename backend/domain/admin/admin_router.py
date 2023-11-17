@@ -12,9 +12,13 @@ from domain.user.user_crud import (
     update_user,
     remove_user,
 )
+from domain.vault.vault_crud import (
+    get_vault_by_user_id,
+    update_vault,
+)
 from models import Admin, User
 from domain.user.user_schema import UserResponse, UserUpdate
-
+from domain.vault.vault_schema import VaultUpdate, VaultResponse
 
 router = APIRouter(prefix="/vaultmaster/admin")
 
@@ -75,17 +79,21 @@ def user_vault_get_admin(
     user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
-    pass
+) -> VaultResponse:
+    check_user_status(db, current_user)
+    return get_vault_by_user_id(db, user_id)
 
 
 @router.put("/user_vault/{user_id}")
 def user_vault_update_admin(
+    vault_update: VaultUpdate,
     user_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
-    pass
+) -> VaultResponse:
+    check_user_status(db, current_user)
+    user = get_user_by_id(db, user_id)
+    return update_vault(db, vault_update, user)
 
 
 @router.get("/user_credential/{user_id}/list")
