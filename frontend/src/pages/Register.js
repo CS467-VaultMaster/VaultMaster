@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GeneratePassword from "../components/GeneratePassword";
 import { passwordComplexity, hasPasswordBeenPwned } from "../utilities/passwordUtils";
 import { QRCodeSVG } from "qrcode.react";
@@ -22,6 +22,10 @@ export default function Register() {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return re.test(email);
   };
+
+  const handleLogin = () => {
+    navigate("/login")
+  }
 
   const handleRegistration = async (e) => {
     setGeneralError("");
@@ -71,7 +75,6 @@ export default function Register() {
       );
 
       if (response.status === 200) {
-        console.log(response.data);
         setOtpUri(response.data.otp_uri);
         setGeneralError("");
         setPasswordError("");
@@ -181,10 +184,9 @@ export default function Register() {
             />
           </div>
 
-          <button type="submit">Register</button>
-
-          <div className="register-link">
-            <Link to="/login">Login</Link>
+          <div className="button-container">
+            <button type="submit">Register</button>
+            <button onClick={handleLogin}>Login</button>
           </div>
         </form>
       )}

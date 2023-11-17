@@ -48,52 +48,64 @@ function AddCredential({ onAdd }) {
   return (
     <div>
       <h3>Add Credential</h3>
-      <label>
-        Nickname
-        <input
-          type="text"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        URL
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Password
-        <input
-          type="text"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Category
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Note
-        <input
-          type="text"
-          placeholder="optional"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-        />
-      </label>
-      <button onClick={handleSubmit}>Add</button>
+      <div className="add-credential">
+        <div className="label-input">
+          <label>
+            Nickname
+            <input
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div className="label-input">
+          <label>
+            URL
+            <input
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div className="label-input">
+          <label>
+            Password
+            <input
+              type="text"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div className="label-input">
+          <label>
+            Category
+            <input
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div className="label-input">
+          <label>
+            Note
+            <input
+              type="text"
+              placeholder="optional"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </label>
+        </div>
+        <button onClick={handleSubmit}>Add</button>
+      </div>
     </div>
   );
 }

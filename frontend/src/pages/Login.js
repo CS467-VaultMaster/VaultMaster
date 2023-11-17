@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import GeneratePassword from "../components/GeneratePassword";
 
 export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
   const [username, setUsername] = useState("");
@@ -32,12 +31,9 @@ export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
       );
 
       if (response.status === 200) {
-        // console.log(response.data)
         sessionStorage.setItem("authToken", response.data.access_token);
         setIsGoodPassword(true);
         navigate("/mfa");
-        // setIsAuthenticated(true);
-        // navigate("/vault");
       }
     } catch (error) {
       console.log(error.response.data.detail);
@@ -73,14 +69,13 @@ export default function Login({ setIsAuthenticated, setIsGoodPassword }) {
             required
           />
         </div>
-
-        <button type="submit">Login</button>
+        <div className="button-container">
+          <button type="submit">Login</button>
+          <button onClick={handleRegister}>Register</button>
+        </div>
       </form>
 
-      <div className="login-link">
-        <button onClick={handleRegister}>Register</button>
-      </div>
-      <GeneratePassword/>
+      <div className="login-link"></div>
     </div>
   );
 }

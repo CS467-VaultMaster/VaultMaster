@@ -29,7 +29,6 @@ export default function Profile({ handleLogout }) {
           { headers }
         );
         setUserData((prevData) => ({ ...prevData, ...response.data }));
-        console.log(response.data);
       } catch (error) {
         setErrorMessage("No token found!");
       }
@@ -179,9 +178,11 @@ export default function Profile({ handleLogout }) {
             onChange={handleInputChange}
           />
         </div>
-        <button type="submit">Update Profile</button>
+        <div className="button-container">
+          <button onClick={handleDelete}>Delete Profile</button>
+          <button type="submit">Update Profile</button>
+        </div>
       </form>
-      <button onClick={handleDelete}>Delete Profile</button>
       {successMessage && <p className="success">{successMessage}</p>}
     </div>
   );

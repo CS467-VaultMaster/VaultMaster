@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddCredential from "../components/AddCredential";
 import CredentialsTable from "../components/CredentialsTable";
 import { hasPasswordBeenPwned, verifyToken } from "../utilities/passwordUtils";
+import GeneratePassword from "../components/GeneratePassword";
 
 function VaultDashboard() {
   const [credentials, setCredentials] = useState([]);
@@ -10,6 +11,14 @@ function VaultDashboard() {
   const [isPwdVerified, setIsPwdVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [hasPwnedPassword, setHasPwnedPassword] = useState(false);
+
+  useEffect(() => {
+    const isVerified = sessionStorage.getItem("isPwdVerified") === "true"
+    if (isVerified) {
+      setIsPwdVerified(true)
+      fetchCredentials()
+    }
+  }, [])
 
   const handlePasswordSubmit = async (event) => {
     event.preventDefault();
@@ -25,7 +34,6 @@ function VaultDashboard() {
 
     try {
       setErrorMessage("");
-      console.log(`Password: ${password}`);
       const response = await axios.put(
         `${process.env.REACT_APP_FASTAPI_URL}/vaultmaster/vault/open`,
         {
@@ -66,7 +74,6 @@ function VaultDashboard() {
       const checkPasswordPwnedStatus = await Promise.all(
         response.data.map(async (credential) => {
           const isPwned = await hasPasswordBeenPwned(credential.password);
-          console.log(credential);
           return { ...credential, isPwned }; // Add breach status to each credential
         })
       );
@@ -104,7 +111,7 @@ function VaultDashboard() {
 
       if (response.status === 204) {
         fetchCredentials();
-        console.log("Deleted credential with ID:", id);
+        // console.log("Deleted credential with ID:", id);
       }
     } catch (error) {
       console.error("Error deleting credential:", error);
@@ -129,15 +136,14 @@ function VaultDashboard() {
         </form>
       ) : (
         <div>
-          {/* {successMessage && <p>{successMessage}</p>} */}
+          <AddCredential onAdd={handleAddCredential} />
+          <GeneratePassword />
           {hasPwnedPassword && (
             <p className="warning-message">
               Warning: One or more of your passwords may have been exposed in a data
               breach. It is recommended to change them.
             </p>
           )}
-          <AddCredential onAdd={handleAddCredential} />
-          {/* <AddCredential/> */}
           <CredentialsTable
             credentials={credentials}
             onEditComplete={handleEditComplete}

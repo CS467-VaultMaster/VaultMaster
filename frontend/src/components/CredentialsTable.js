@@ -29,7 +29,6 @@ export default function CredentialsTable({
   };
 
   const handleSave = async (id) => {
-    console.log(editForm);
     try {
       const token = verifyToken();
       if (!token) {
@@ -45,7 +44,6 @@ export default function CredentialsTable({
           },
         }
       );
-      // onEditComplete(id, editedCredential)
       setEditingId(null); // Exit editing mode
       fetchCredentials();
     } catch (error) {

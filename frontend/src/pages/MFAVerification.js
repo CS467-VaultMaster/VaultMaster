@@ -37,7 +37,7 @@ export default function MFAVerification({ setIsAuthenticated }) {
       }
     } catch (error) {
       console.error(error);
-      setMfaToken("")
+      setMfaToken("");
       setMfaError("Invalid MFA token.");
     }
   };
@@ -48,7 +48,7 @@ export default function MFAVerification({ setIsAuthenticated }) {
       {mfaError && <p className="error">{mfaError}</p>}
       <form onSubmit={handleSubmit}>
         <div className="input-group">
-          <label htmlFor="MFA-token">MFA Token</label>
+          <label htmlFor="MFA-token">6-digit MFA Token</label>
           <input
             type="text"
             id="mfaToken"
