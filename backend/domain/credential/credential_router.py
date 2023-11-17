@@ -60,10 +60,3 @@ def credential_remove(
     current_user: User = Depends(get_current_user),
 ):
     return remove_credential(db, credential_id, current_user)
-
-@router.get("/credential/db")
-def credential_get_db(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    return get_creds_raw_format(db, current_user)

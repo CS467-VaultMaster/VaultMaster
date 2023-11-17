@@ -16,9 +16,16 @@ from domain.vault.vault_crud import (
     get_vault_by_user_id,
     update_vault,
 )
+from domain.credential.credential_crud import (
+    get_credentials,
+    get_credential_by_id,
+    update_credential,
+    remove_credential,
+)
 from models import Admin, User
 from domain.user.user_schema import UserResponse, UserUpdate
 from domain.vault.vault_schema import VaultUpdate, VaultResponse
+from domain.credential.credential_schema import CredentialResponse, CredentialUpdate
 
 router = APIRouter(prefix="/vaultmaster/admin")
 
@@ -102,7 +109,9 @@ def user_credential_get_admin_all(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    pass
+    check_user_status(db, current_user)
+    user = get_user_by_id(db, user_id)
+    return get_credentials(db, user)
 
 
 @router.get("/user_credential/{user_id}/{credential_id}")
@@ -111,18 +120,22 @@ def user_credential_get_admin(
     credential_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
-    pass
+) -> CredentialResponse | None:
+    check_user_status(db, current_user)
+    return get_credential_by_id(db, credential_id)
 
 
 @router.put("/user_credential/{user_id}/{credential_id}")
 def user_credential_update_admin(
+    credential_update: CredentialUpdate,
     user_id: str,
     credential_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
-    pass
+) -> CredentialResponse:
+    check_user_status(db, current_user)
+    user = get_user_by_id(db, user_id)
+    return update_credential(db, credential_id, credential_update, user)
 
 
 @router.delete("/user_credential/{user_id}/{credential_id}")
@@ -132,4 +145,6 @@ def user_credential_delete_admin(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    pass
+    check_user_status(db, current_user)
+    user = get_user_by_id(db, user_id)
+    return remove_credential(db, credential_id, user)
