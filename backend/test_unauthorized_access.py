@@ -5,7 +5,7 @@ from main import app
 client = TestClient(app)
 
 
-# Tests for unauthorized access.
+# Test unauthorized endpoint access.
 def test_user_account_get_401():
     response = client.get("/vaultmaster/user/account")
     assert response.status_code == 401
