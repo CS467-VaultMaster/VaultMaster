@@ -58,30 +58,60 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 
 #### User
 
-**POST /register**
-- This endpoint is used by users to register.
+**POST /vaultmaster/user/register**
+- This endpoint is used for user registration.
 - Users can create an account by providing a username, password, first name, last name, and email.
-- Upon successful registration, the endpoint will return a URI that will be used to generate a QR code for multi-factor authentication.
+- Upon successful registration, the endpoint returns a URI, which is used to generate a QR code for multi-factor authentication.
 
-**POST /login**
-- This endpoint is used by users to log in.
-- Users will enter their login credentials (username and password) to receive a JWT token that expires after 10 minutes.
-- This endpoint keeps track of how many times the user attempted to log in. After 3 consecutive failed login attempts, the user account is locked for 10 minutes.
+**POST /vaultmaster/user/login**
+- This endpoint is used for user login.
+- Users enter their login credentials (username and password) to receive a JWT token that expires after 10 minutes.
+- The endpoint tracks login attempts, and after 3 consecutive failed login attempts, the user account is locked for 10 minutes.
 
-**GET /otp_verify/{code}**
-- This endpoint is used by users for multi-factor authentication when logging in.
-- After a successful login using a username and password/receiving a JWT token, users will be prompted to enter a 6-digit MFA code.
-- The MFA code must be verified for users to be fully authenticated.
+**GET /vaultmaster/user/otp_verify/{code}**
+- This endpoint is used for multi-factor authentication during login.
+- After a successful login (using a username + password and receiving a JWT token), users are prompted to enter a 6-digit MFA code.
+- The MFA code must be verified for full user authentication.
 
-**GET /account**
+**GET /vaultmaster/user/account**
 - This endpoint returns user information for the currently logged-in user.
 
-**PUT /account**
-- This endpoint is used by users to update their account information.
+**PUT /vaultmaster/user/account**
+- This endpoint is used for updating user account information.
 - Users can update their username, password, first name, last name, and email.
 
-**DELETE /account**
-- This endpoint is used by users to remove their account.
+**DELETE /vaultmaster/user/account**
+- This endpoint is used for removing a user account.
+
+#### Vault
+
+**GET /vaultmaster/vault**
+- This endpoint retrieves the vault assigned to the currently logged-in user.
+
+**PUT /vaultmaster/vault**
+- This endpoint is used for updating the user's vault.
+- Only the vault name can be updated.
+
+**PUT /vaultmaster/vault/open**
+- This endpoint is used for opening the assigned vault.
+- Users are required to enter their master password (same as their login password) to open the vault and access their web credentials.
+
+#### Credential
+
+**GET /vaultmaster/credential**
+- This endpoint returns the list of web credentials in the currently logged-in user's vault.
+
+**POST /vaultmaster/credential**
+- This endpoint is used for adding a new web credential to the vault.
+- Users can enter a nickname, category, URL, password, and note for the credential they want to store.
+
+**PUT /vaultmaster/credential/{credential_id}**
+- This endpoint is used for updating a web credential in the vault.
+- Users can update the nickname, category, URL, password, and note of the credential.
+
+**DELETE /vaultmaster/credential/{credential_id}**
+- This endpoint is used for deleting a web credential from the vault.
+
 
 ## Encryption and Decryption
 <!---
