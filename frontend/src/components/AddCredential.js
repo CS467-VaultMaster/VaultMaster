@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function AddCredential({ onAdd }) {
-  const [nickname, setNickname] = useState("Amazon");
-  const [url, setUrl] = useState("amazon.ca");
-  const [password, setPassword] = useState("password");
-  const [category, setCategory] = useState("shopping");
-  const [note, setNote] = useState("sample note");
+  const [nickname, setNickname] = useState("");
+  const [url, setUrl] = useState("");
+  const [password, setPassword] = useState("");
+  const [category, setCategory] = useState("");
+  const [note, setNote] = useState("");
 
   const handleSubmit = async () => {
     try {
