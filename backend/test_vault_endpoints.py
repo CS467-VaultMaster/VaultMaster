@@ -69,3 +69,27 @@ def test_update_vault(client, test_user):
         headers={"Authorization": f"Bearer {access_token}"},
     )
     assert vault_response.json()["vault_name"] == "UpdatedVaultName"
+
+
+def test_open_vault(client, test_user):
+    # Assuming you have a valid access token obtained from the login endpoint.
+    access_token = test_login(client, test_user)
+    data = {"password": "testpassword"}
+    vault_response = client.put(
+        "/vaultmaster/vault/open",
+        json=data,
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+    assert vault_response.status_code == 200
+
+
+def test_open_vault_incorrect_password(client, test_user):
+    # Assuming you have a valid access token obtained from the login endpoint.
+    access_token = test_login(client, test_user)
+    data = {"password": "testpassword1"}
+    vault_response = client.put(
+        "/vaultmaster/vault/open",
+        json=data,
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+    assert vault_response.status_code == 401
