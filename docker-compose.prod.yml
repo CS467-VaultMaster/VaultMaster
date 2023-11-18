@@ -14,5 +14,5 @@ services:
       - "443:443"
     image: vaultmaster-prod-server
     volumes:
-      - prod-server/.well-known:/.well-known # SSL verification (via HTTP)
-      - prod-server/ssl:/etc/nginx/ssl # SSL certificates
+      - /home/ec2-user/VaultMaster/prod-server/.well-known:/.well-known # SSL verification (via HTTP)
+      - /home/ec2-user/VaultMaster/prod-server/ssl:/etc/nginx/ssl # SSL certificates
