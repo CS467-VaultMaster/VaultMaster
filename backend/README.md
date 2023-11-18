@@ -56,6 +56,33 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 
 ## APIs
 
+#### User
+
+**POST /register**
+- This endpoint is used by users to register.
+- Users can create an account by providing a username, password, first name, last name, and email.
+- Upon successful registration, the endpoint will return a URI that will be used to generate a QR code for multi-factor authentication.
+
+**POST /login**
+- This endpoint is used by users to log in.
+- Users will enter their login credentials (username and password) to receive a JWT token that expires after 10 minutes.
+- This endpoint keeps track of how many times the user attempted to log in. After 3 consecutive failed login attempts, the user account is locked for 10 minutes.
+
+**GET /otp_verify/{code}**
+- This endpoint is used by users for multi-factor authentication when logging in.
+- After a successful login using a username and password/receiving a JWT token, users will be prompted to enter a 6-digit MFA code.
+- The MFA code must be verified for users to be fully authenticated.
+
+**GET /account**
+- This endpoint returns user information for the currently logged-in user.
+
+**PUT /account**
+- This endpoint is used by users to update their account information.
+- Users can update their username, password, first name, last name, and email.
+
+**DELETE /account**
+- This endpoint is used by users to remove their account.
+
 ## Encryption and Decryption
 <!---
 ## DB setup guide
