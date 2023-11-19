@@ -7,6 +7,7 @@ import Tools from "./pages/Tools";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import MFAVerification from "./pages/MFAVerification";
+import NotFound from "./pages/NotFound";
 
 // FastAPI endpoint URL, defined so that you can run React either locally or in the container w/o issues.
 // Looked into how best to pass this - useContext()? set the value on window? - but I'll let you pick. (- Will)
@@ -91,7 +92,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
     </div>
