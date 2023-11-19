@@ -7,10 +7,11 @@ from datetime import datetime
 from domain.vault.vault_crud import create_vault
 from domain.vault.vault_schema import VaultCreate
 import pyotp
-
+from starlette.config import Config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+config = Config('.env')
+SECRET_ADMIN_KEY = config('SECRET_ADMIN_KEY')
 
 def create_user(db: Session, user_create: UserCreate) -> User:
     """
@@ -130,7 +131,7 @@ def generate_otp() -> str:
 
 
 def check_admin_key(admin_key: str) -> bool:
-    if admin_key and admin_key == "SECRET_ADMIN_KEY":
+    if admin_key and admin_key == SECRET_ADMIN_KEY:
         return True
 
     return False

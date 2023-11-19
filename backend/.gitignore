@@ -1,0 +1,6 @@
+*.pyc
+__pycache__
+migrations
+alembic.ini
+.pytest_cache
+.env

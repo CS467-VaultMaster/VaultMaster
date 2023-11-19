@@ -25,11 +25,13 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from models import User
 import pyotp
+from starlette.config import Config
 
+config = Config('.env')
 router = APIRouter(prefix="/vaultmaster/user")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 10
-SECRET_KEY = "SECRET"
+ACCESS_TOKEN_EXPIRE_MINUTES = int(config('ACCESS_TOKEN_EXPIRE_MINUTES'))
+SECRET_KEY = config('SECRET_KEY')
 ALGORITHM = "HS512"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/vaultmaster/user/login")
 
