@@ -157,6 +157,28 @@ def test_update_user(client, test_user):
     assert response.json()["first_name"] == "Updated"
 
 
+def test_update_user_back(client, test_user):
+    # Assuming you have a valid access token obtained from the login endpoint.
+    access_token = test_login(client, test_user)
+
+    # Test update user endpoint with authentication.
+    data = {
+        "username": "testuser",
+        "password1": "testpassword",
+        "password2": "testpassword",
+        "first_name": "Test",
+        "last_name": "User",
+        "email": "testuser@example.com",
+    }
+    response = client.put(
+        "/vaultmaster/user/account",
+        json=data,
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+    assert response.status_code == 200
+    assert response.json()["first_name"] == "Test"
+
+
 def test_remove_user(client, test_user):
     # Assuming you have a valid access token obtained from the login endpoint.
     access_token = test_login(client, test_user)
