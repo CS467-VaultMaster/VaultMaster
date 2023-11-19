@@ -43,8 +43,8 @@ To install and run VaultMaster using Docker, follow these steps:
 ## Usage
 Visit [vaultmaster.site](https://www.vaultmaster.site) to use the production version of the app.
 ## Contributing
-We welcome all contributions. Please see our Contribution Guidelines for more information. (TODO)
+We welcome all contributions. Please see our [Contribution Guidelines](https://github.com/CS467-VaultMaster/VaultMaster/blob/main/CONTRIBUTING.md) for more information. (TODO)
 ## Authors and Acknowledgement
 Developed by Will Lambeth, Elliott Larsen, and Myles Penner for OSU CS467.
 ## License
-This project is published under the MIT License - see the LICENSE.md file for details (TODO).
+This project is published under the [MIT License](https://github.com/CS467-VaultMaster/VaultMaster/blob/main/LICENSE.md).
