@@ -23,3 +23,8 @@ frontend/build
 
 # Alembic versions
 backend/alembic/versions
+
+# SSL files (on prod)
+*.pem
+*.key
+*.crt
