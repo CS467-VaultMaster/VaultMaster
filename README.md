@@ -1,6 +1,6 @@
 # VaultMaster
 ## Description
-VaultMaster is a web password manager that allows storage and retrieval of web credentials. It is built using React, FastAPI, PostgreSQL, and AWS, designed to offer high security and ease of use.
+VaultMaster is a web password manager that allows storage and retrieval of web credentials. It is built using React, FastAPI, PostgreSQL, and AWS, designed to offer high security and ease of use. App features time-based OTP MFA, checks of whether user passwords have appeared in data breaches, and end-to-end encryption of all information.
 ## Visuals
 Here is a look at VaultMaster in action:
 ### Login Page
