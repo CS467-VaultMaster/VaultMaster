@@ -13,7 +13,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 
 ## Data Models
 
-#### User
+### User :sunglasses:
 
 | **Field**           | **Type**    |
 |---------------------|-------------|
@@ -30,7 +30,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 | last_login_attempt  | TIMESTAMPTZ |
 | login_attempts      | SMALLINT    |
 
-#### Vault
+### Vault :shield:
 
 | **Field**           | **Type**    |
 |---------------------|-------------|
@@ -40,7 +40,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 | created             | TIMESTAMPTZ |
 | modified            | TIMESTAMPTZ |
 
-#### Credential
+### Credential :closed_lock_with_key:
 
 | **Field**           | **Type**    |
 |---------------------|-------------|
@@ -56,7 +56,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 
 ## APIs
 
-#### User
+### User :sunglasses:
 
 **POST /vaultmaster/user/register**
 - This endpoint is used for user registration.
@@ -83,7 +83,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 **DELETE /vaultmaster/user/account**
 - This endpoint is used for removing a user account.
 
-#### Vault
+### Vault :shield:
 
 **GET /vaultmaster/vault**
 - This endpoint retrieves the vault assigned to the currently logged-in user.
@@ -96,7 +96,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 - This endpoint is used for opening the assigned vault.
 - Users are required to enter their master password (same as their login password) to open the vault and access their web credentials.
 
-#### Credential
+### Credential :closed_lock_with_key:
 
 **GET /vaultmaster/credential**
 - This endpoint returns the list of web credentials in the currently logged-in user's vault.
