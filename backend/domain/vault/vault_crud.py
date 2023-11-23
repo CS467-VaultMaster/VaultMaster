@@ -51,6 +51,7 @@ def open_vault(vault_open: VaultOpen, current_user: User) -> bool:
     Compares user input to user's password and opens the vault if verified.
     """
     from domain.user.user_crud import pwd_context
+
     if not pwd_context.verify(vault_open.password, current_user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

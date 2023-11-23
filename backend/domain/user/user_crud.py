@@ -10,8 +10,9 @@ import pyotp
 from starlette.config import Config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-config = Config('.env')
-SECRET_ADMIN_KEY = config('SECRET_ADMIN_KEY')
+config = Config(".env")
+SECRET_ADMIN_KEY = config("SECRET_ADMIN_KEY")
+
 
 def create_user(db: Session, user_create: UserCreate) -> User:
     """

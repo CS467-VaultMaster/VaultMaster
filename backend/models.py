@@ -10,8 +10,6 @@ class User(Base):
     User class in DB.
     """
 
-    # DONE: Add first name and last name.
-    # TODO: Add regex.
     __tablename__ = "site_user"
     id = Column(String, primary_key=True)
     username = Column(String, unique=True, nullable=False)
@@ -68,6 +66,7 @@ class Admin(Base):
     """
     Admin class in DB.
     """
+
     __tablename__ = "admin"
     id = Column(String, primary_key=True)
     user_id = Column(String, nullable=False)
