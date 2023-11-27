@@ -4,7 +4,6 @@ import { verifyToken } from "../utilities/passwordUtils";
 
 export default function CredentialsTable({
   credentials,
-  onEditComplete,
   onDelete,
   fetchCredentials,
 }) {

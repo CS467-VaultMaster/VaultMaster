@@ -89,10 +89,6 @@ function VaultDashboard() {
     fetchCredentials();
   };
 
-  const handleEditComplete = () => {
-    // fetchCredentials();
-  };
-
   const handleDeleteCredential = async (id) => {
     try {
       const token = verifyToken();
@@ -111,7 +107,6 @@ function VaultDashboard() {
 
       if (response.status === 204) {
         fetchCredentials();
-        // console.log("Deleted credential with ID:", id);
       }
     } catch (error) {
       console.error("Error deleting credential:", error);
@@ -146,7 +141,6 @@ function VaultDashboard() {
           )}
           <CredentialsTable
             credentials={credentials}
-            onEditComplete={handleEditComplete}
             onDelete={handleDeleteCredential}
             fetchCredentials={fetchCredentials}
           />
