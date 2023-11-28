@@ -26,18 +26,27 @@ Here is a look at VaultMaster in action:
 ## Installation
 To install and run VaultMaster using Docker, follow these steps:
 1. **Clone the Repository**
+2. **Create a local .env.dev file**
+   The following values must be defined in a file called `.env.dev`, in the repo's root directory, before the app will run locally:
+   ```
+   POSTGRES_USER=               # arbitrary string
+   POSTGRES_PASSWORD=           # arbitrary string
+   SECRET_KEY=                  # arbitrary string
+   SECRET_ADMIN_KEY=            # arbitrary string
+   ACCESS_TOKEN_EXPIRE_MINUTES= # arbitrary integer
+   ```
 3. **Build the Docker Images**:
 - Ensure Docker is installed on your machine.
 - Build the Docker images for the frontend, backend, and database services:
   ```
   docker-compose build
   ```
-3. **Run the Docker Containers**:
+4. **Run the Docker Containers**:
 - Start the containers:
   ```
   docker-compose up
   ```
-4. **Access the Application**:
+5. **Access the Application**:
 - The application should now be running at [localhost:3000](http://localhost:3000) for local development purposes.
 
 ## Usage
