@@ -10,6 +10,7 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 - [Passlib](https://github.com/glic3rinu/passlib)
 - [python-jose](https://github.com/mpdavis/python-jose/tree/master)
 - [cryptography](https://github.com/pyca/cryptography)
+- [crypto](https://pkg.go.dev/crypto)
 
 ## Data Models
 
@@ -114,6 +115,11 @@ This repository houses the backend for VaultMaster, developed using [FastAPI](ht
 
 
 ## Encryption and Decryption
+Each web credential undergoes double encryption layers. Here is an example: Suppose the user's web credential password is "Password1234." First, it gets encrypted by Python's [cryptography](https://github.com/pyca/cryptography) library, which generates a unique random string known as the "fernet key" for each credential. This key is used to encrypt/decrypt the password. The outcome of the first encryption layer is a base64-encrypted string.
+
+The second layer of encryption is performed through a custom executable built by Elliott. Utilizing [Go](https://go.dev/) and its [crypto](https://pkg.go.dev/crypto) package, it employs a secret key combined with the user's ID as a salt to encrypt the base64-encrypted fernet key and password into hexadecimal strings. The outcome of this second encryption layer is then stored in the database. Decryption is done by following these steps in reverse. Please refer to the diagram below for a visual representation of the encryption and decryption steps.
+  
+![Diagram](EncDec.png)
 <!---
 ## DB setup guide
 - Start the database container by running the following command.
